@@ -1,0 +1,197 @@
+package com.ronaldo.gestor.back.estructuras.arbol.avl;
+
+import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
+import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
+import com.ronaldo.gestor.back.producto.Producto;
+
+/**
+ *
+ * @author ronaldo
+ */
+public class ArbolAVL {
+
+    private NodoAVL raiz;
+
+    public void insertar(Producto producto) throws ElementoExistenteException {
+        this.raiz = insertarRecursivo(raiz, producto);
+    }
+
+    public NodoAVL insertarRecursivo(NodoAVL nodo, Producto producto) throws ElementoExistenteException {
+        if (nodo == null) {
+            return new NodoAVL(producto);
+        }
+
+        if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) < 0) {
+            NodoAVL izquierdo = insertarRecursivo(nodo.getIzquierdo(), producto);
+            nodo.setIzquierdo(izquierdo);
+        } else if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) > 0) {
+            NodoAVL derecho = insertarRecursivo(nodo.getDerecho(), producto);
+            nodo.setDerecho(derecho);
+        } else {
+            throw new ElementoExistenteException("El producto con nombre " + producto.getNombre() + " ya ha sido registrado antes.");
+        }
+
+        return verificarEquilibrio(nodo);
+    }
+
+    private NodoAVL verificarEquilibrio(NodoAVL nodo) {
+        nodo.actualizarAltura();
+
+        int FE = nodo.getFactorEquilibrio();
+
+        //II
+        if (FE < -1 && nodo.getIzquierdo().getFactorEquilibrio() <= 0) {
+            return equilibrarII(nodo);
+        }
+        //ID
+        if (FE < -1 && nodo.getIzquierdo().getFactorEquilibrio() > 0) {
+            return equilibrarID(nodo);
+        }
+        //DD
+        if (FE > 1 & nodo.getDerecho().getFactorEquilibrio() >= 0) {
+            return equilibrarDD(nodo);
+        }
+        //DI
+        if (FE > 1 && nodo.getDerecho().getFactorEquilibrio() < 0) {
+            return equilibrarDI(nodo);
+        }
+
+        return nodo;
+    }
+
+    private NodoAVL equilibrarII(NodoAVL nodo) {
+        NodoAVL nodo1 = nodo.getIzquierdo();
+
+        nodo.setIzquierdo(nodo1.getDerecho());
+        nodo1.setDerecho(nodo);
+
+        nodo.actualizarAltura();
+        nodo1.actualizarAltura();
+
+        return nodo1;
+    }
+
+    private NodoAVL equilibrarDD(NodoAVL nodo) {
+
+        NodoAVL nodo1 = nodo.getDerecho();
+
+        nodo.setDerecho(nodo1.getIzquierdo());
+        nodo1.setIzquierdo(nodo);
+
+        nodo.actualizarAltura();
+        nodo1.actualizarAltura();
+
+        return nodo1;
+    }
+
+    private NodoAVL equilibrarID(NodoAVL nodo) {
+
+        NodoAVL nodo1 = nodo.getIzquierdo();
+        NodoAVL nodo2 = nodo1.getDerecho();
+
+        nodo1.setDerecho(nodo2.getIzquierdo());
+        nodo.setIzquierdo(nodo2.getDerecho());
+
+        nodo2.setIzquierdo(nodo1);
+        nodo2.setDerecho(nodo);
+
+        nodo.actualizarAltura();
+        nodo1.actualizarAltura();
+        nodo2.actualizarAltura();
+
+        return nodo2;
+    }
+
+    private NodoAVL equilibrarDI(NodoAVL nodo) {
+
+        NodoAVL nodo1 = nodo.getDerecho();
+        NodoAVL nodo2 = nodo.getIzquierdo();
+
+        nodo1.setIzquierdo(nodo2.getDerecho());
+        nodo.setDerecho(nodo2.getIzquierdo());
+
+        nodo2.setDerecho(nodo1);
+        nodo2.setIzquierdo(nodo);
+
+        nodo.actualizarAltura();
+        nodo1.actualizarAltura();
+        nodo2.actualizarAltura();
+
+        return nodo2;
+    }
+
+    public Producto buscar(String nombre) throws ElementoNoEncontradoException {
+        NodoAVL nodo = buscarRecursivo(raiz, nombre);
+
+        if (nodo == null) {
+            throw new ElementoNoEncontradoException("Producto con nombre " + nombre + " no encontrado en AVL");
+        }
+        return nodo.getElemento();
+    }
+
+    private NodoAVL buscarRecursivo(NodoAVL nodo, String nombre) {
+        if (nodo == null) {
+            return null;
+        }
+
+        if (nombre.compareTo(nodo.getElemento().getNombre()) < 0) {
+            return buscarRecursivo(nodo.getIzquierdo(), nombre);
+        }
+
+        if (nombre.compareTo(nodo.getElemento().getNombre()) > 0) {
+            return buscarRecursivo(nodo.getDerecho(), nombre);
+        }
+
+        return nodo;
+    }
+
+    public void eliminar(String nombre) throws ElementoNoEncontradoException {
+        this.raiz = eliminarRecursivo(raiz, nombre);
+    }
+
+    public NodoAVL eliminarRecursivo(NodoAVL nodo, String nombre) throws ElementoNoEncontradoException {
+        if (nodo == null) {
+            throw new ElementoNoEncontradoException("No existe el producto con nombre " + nombre + " , se cancela eliminacion");
+        }
+
+        if (nombre.compareTo(nodo.getElemento().getNombre()) < 0) {
+            NodoAVL izquierdo = eliminarRecursivo(nodo.getIzquierdo(), nombre);
+            nodo.setIzquierdo(izquierdo);
+        } else if (nombre.compareTo(nodo.getElemento().getNombre()) > 0) {
+            NodoAVL derecho = eliminarRecursivo(nodo.getDerecho(), nombre);
+            nodo.setDerecho(derecho);
+        } else {
+            if (nodo.getIzquierdo() == null || nodo.getDerecho() == null) {
+                NodoAVL ref = nodo.getIzquierdo() != null ? nodo.getIzquierdo() : nodo.getDerecho();
+
+                if (ref == null) {
+                    nodo = null;
+                } else {
+                    nodo = ref;
+                }
+            } else {
+                NodoAVL ref = obtenerNodoMenor(nodo);
+
+                Producto producto = ref.getElemento();
+                nodo.setElemento(producto);
+
+                NodoAVL derecho = eliminarRecursivo(nodo.getDerecho(), ref.getElemento().getNombre());
+                nodo.setDerecho(derecho);
+            }
+        }
+
+        if (nodo == null) {
+            return nodo;
+        }
+        return verificarEquilibrio(nodo);
+    }
+
+    private NodoAVL obtenerNodoMenor(NodoAVL nodo) {
+        NodoAVL ref = nodo;
+
+        while (ref.getIzquierdo() != null) {
+            ref = ref.getIzquierdo();
+        }
+        return ref;
+    }
+}
