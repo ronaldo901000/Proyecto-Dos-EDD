@@ -1,5 +1,6 @@
 package com.ronaldo.gestor.back.estructuras.arbol.avl;
 
+import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
 import com.ronaldo.gestor.back.producto.Producto;
@@ -12,10 +13,22 @@ public class ArbolAVL {
 
     private NodoAVL raiz;
 
+    /**
+     *
+     * @param producto
+     * @throws ElementoExistenteException
+     */
     public void insertar(Producto producto) throws ElementoExistenteException {
         this.raiz = insertarRecursivo(raiz, producto);
     }
 
+    /**
+     *
+     * @param nodo
+     * @param producto
+     * @return
+     * @throws ElementoExistenteException
+     */
     public NodoAVL insertarRecursivo(NodoAVL nodo, Producto producto) throws ElementoExistenteException {
         if (nodo == null) {
             return new NodoAVL(producto);
@@ -34,6 +47,11 @@ public class ArbolAVL {
         return verificarEquilibrio(nodo);
     }
 
+    /**
+     *
+     * @param nodo
+     * @return
+     */
     private NodoAVL verificarEquilibrio(NodoAVL nodo) {
         nodo.actualizarAltura();
 
@@ -59,6 +77,11 @@ public class ArbolAVL {
         return nodo;
     }
 
+    /**
+     *
+     * @param nodo
+     * @return
+     */
     private NodoAVL equilibrarII(NodoAVL nodo) {
         NodoAVL nodo1 = nodo.getIzquierdo();
 
@@ -71,6 +94,11 @@ public class ArbolAVL {
         return nodo1;
     }
 
+    /**
+     *
+     * @param nodo
+     * @return
+     */
     private NodoAVL equilibrarDD(NodoAVL nodo) {
 
         NodoAVL nodo1 = nodo.getDerecho();
@@ -84,6 +112,11 @@ public class ArbolAVL {
         return nodo1;
     }
 
+    /**
+     *
+     * @param nodo
+     * @return
+     */
     private NodoAVL equilibrarID(NodoAVL nodo) {
 
         NodoAVL nodo1 = nodo.getIzquierdo();
@@ -102,6 +135,11 @@ public class ArbolAVL {
         return nodo2;
     }
 
+    /**
+     *
+     * @param nodo
+     * @return
+     */
     private NodoAVL equilibrarDI(NodoAVL nodo) {
 
         NodoAVL nodo1 = nodo.getDerecho();
@@ -120,6 +158,12 @@ public class ArbolAVL {
         return nodo2;
     }
 
+    /**
+     *
+     * @param nombre
+     * @return
+     * @throws ElementoNoEncontradoException
+     */
     public Producto buscar(String nombre) throws ElementoNoEncontradoException {
         NodoAVL nodo = buscarRecursivo(raiz, nombre);
 
@@ -129,6 +173,12 @@ public class ArbolAVL {
         return nodo.getElemento();
     }
 
+    /**
+     *
+     * @param nodo
+     * @param nombre
+     * @return
+     */
     private NodoAVL buscarRecursivo(NodoAVL nodo, String nombre) {
         if (nodo == null) {
             return null;
@@ -145,10 +195,22 @@ public class ArbolAVL {
         return nodo;
     }
 
+    /**
+     *
+     * @param nombre
+     * @throws ElementoNoEncontradoException
+     */
     public void eliminar(String nombre) throws ElementoNoEncontradoException {
         this.raiz = eliminarRecursivo(raiz, nombre);
     }
 
+    /**
+     *
+     * @param nodo
+     * @param nombre
+     * @return
+     * @throws ElementoNoEncontradoException
+     */
     public NodoAVL eliminarRecursivo(NodoAVL nodo, String nombre) throws ElementoNoEncontradoException {
         if (nodo == null) {
             throw new ElementoNoEncontradoException("No existe el producto con nombre " + nombre + " , se cancela eliminacion");
@@ -186,6 +248,11 @@ public class ArbolAVL {
         return verificarEquilibrio(nodo);
     }
 
+    /**
+     *
+     * @param nodo
+     * @return
+     */
     private NodoAVL obtenerNodoMenor(NodoAVL nodo) {
         NodoAVL ref = nodo;
 
@@ -194,4 +261,30 @@ public class ArbolAVL {
         }
         return ref;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public ListaEnlazada listar() {
+        ListaEnlazada lista = new ListaEnlazada();
+
+        listarInOrden(raiz, lista);
+
+        return lista;
+    }
+    /**
+     * 
+     * @param nodo
+     * @param lista 
+     */
+
+    private void listarInOrden(NodoAVL nodo, ListaEnlazada lista) {
+        if (nodo != null) {
+            listarInOrden(nodo.getIzquierdo(), lista);
+            lista.insertar(nodo.getElemento());
+            listarInOrden(nodo.getDerecho(), lista);
+        }
+    }
+
 }
