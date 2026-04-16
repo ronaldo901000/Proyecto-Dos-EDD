@@ -6,6 +6,7 @@ import com.ronaldo.gestor.back.estructuras.arbol.bmas.ArbolBMas;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
 import com.ronaldo.gestor.back.producto.Producto;
+import com.ronaldo.gestor.front.frame.FrameGeneral;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        /*
         ArbolAVL avl = new ArbolAVL();
         ArbolB b = new ArbolB();
         ArbolBMas bMas = new ArbolBMas();
@@ -69,5 +71,10 @@ public class Main {
             System.out.println(ex.getMessage());
         }
         System.out.println("INSERTADO EXISTOSO");
+        
+        */
+        
+        FrameGeneral frame = new FrameGeneral();
+        frame.setVisible(true);
     }
 }
