@@ -1,0 +1,24 @@
+digraph ArbolB {
+  node [shape=record, height=.1];
+  nodo1580066828 [label="<hijo0> | { 2027-10-15\nFrijol Negro 1kg } | <hijo1>"];
+  nodo1580066828:hijo0 -> nodo1872034366;
+  nodo1872034366 [label="<hijo0> | { 2026-05-30\nCrema Ácida } | <hijo1> | { 2026-09-15\nPapas Fritas } | <hijo2> | { 2026-12-01\nNueces Mixtas } | <hijo3> | { 2027-02-14\nPalomitas Maíz } | <hijo4>"];
+  nodo1872034366:hijo0 -> nodo225534817;
+  nodo225534817 [label="<hijo0> | { 2026-05-10\nQueso Panela } | <hijo1> | { 2026-05-20\nYogurt Griego } | <hijo2>"];
+  nodo1872034366:hijo1 -> nodo1878246837;
+  nodo1878246837 [label="<hijo0> | { 2026-06-15\nLeche Entera 1L } | <hijo1> | { 2026-07-15\nJugo de Naranja } | <hijo2> | { 2026-08-01\nMantequilla Sin Sal } | <hijo3> | { 2026-08-20\nTé Verde Helado } | <hijo4>"];
+  nodo1872034366:hijo2 -> nodo929338653;
+  nodo929338653 [label="<hijo0> | { 2026-10-10\nBarras de Granola } | <hijo1> | { 2026-11-30\nGalletas Chocolate } | <hijo2>"];
+  nodo1872034366:hijo3 -> nodo1259475182;
+  nodo1259475182 [label="<hijo0> | { 2026-12-31\nRefresco Cola 2L } | <hijo1> | { 2027-01-10\nBebida Energizante } | <hijo2>"];
+  nodo1872034366:hijo4 -> nodo1300109446;
+  nodo1300109446 [label="<hijo0> | { 2027-05-20\nAgua Mineral 600ml } | <hijo1> | { 2027-09-10\nAzúcar Estándar } | <hijo2>"];
+  nodo1580066828:hijo1 -> nodo1020371697;
+  nodo1020371697 [label="<hijo0> | { 2028-05-01\nPasta Spaghetti } | <hijo1> | { 2028-12-31\nLimpiador Multiusos } | <hijo2>"];
+  nodo1020371697:hijo0 -> nodo789451787;
+  nodo789451787 [label="<hijo0> | { 2027-12-01\nArroz Blanco 1kg } | <hijo1> | { 2028-01-20\nAceite de Oliva } | <hijo2>"];
+  nodo1020371697:hijo1 -> nodo1950409828;
+  nodo1950409828 [label="<hijo0> | { 2028-06-15\nCloro Líquido } | <hijo1> | { 2028-10-20\nLavatrastes Líquido } | <hijo2>"];
+  nodo1020371697:hijo2 -> nodo1229416514;
+  nodo1229416514 [label="<hijo0> | { 2029-01-01\nDetergente Polvo } | <hijo1> | { 2029-01-12\nJabón de Tocador } | <hijo2>"];
+}

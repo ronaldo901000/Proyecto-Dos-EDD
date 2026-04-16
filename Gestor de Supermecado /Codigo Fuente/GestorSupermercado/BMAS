@@ -1,0 +1,8 @@
+digraph ArbolBMas {
+  node [shape=record, height=.1];
+  nodo2016447921 [label="<hijo0> | { Lacteos } | <hijo1>"];
+  nodo2016447921:hijo0 -> nodo666988784;
+  nodo666988784 [label="<hijo0> | { Abarrotes | Aceite de Oliva\nArroz Blanco 1kg\nAzúcar Estándar\nFrijol Negro 1kg\nPasta Spaghetti } | <hijo1> | { Bebidas | Agua Mineral 600ml\nBebida Energizante\nJugo de Naranja\nRefresco Cola 2L\nTé Verde Helado } | <hijo2>"];
+  nodo2016447921:hijo1 -> nodo1414644648;
+  nodo1414644648 [label="<hijo0> | { Lacteos | Crema Ácida\nLeche Entera 1L\nMantequilla Sin Sal\nQueso Panela\nYogurt Griego } | <hijo1> | { Limpieza | Cloro Líquido\nDetergente Polvo\nJabón de Tocador\nLavatrastes Líquido\nLimpiador Multiusos } | <hijo2> | { Snacks | Barras de Granola\nGalletas Chocolate\nNueces Mixtas\nPalomitas Maíz\nPapas Fritas } | <hijo3>"];
+}

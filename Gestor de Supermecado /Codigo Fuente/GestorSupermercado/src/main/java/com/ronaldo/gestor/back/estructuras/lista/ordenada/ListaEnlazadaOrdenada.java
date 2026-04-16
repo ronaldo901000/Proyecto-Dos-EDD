@@ -11,10 +11,6 @@ import com.ronaldo.gestor.back.producto.Producto;
  */
 public class ListaEnlazadaOrdenada extends Lista {
 
-    private NodoLista nodoInicial;
-    private NodoLista nodoFinal;
-    private int tamaño;
-
     @Override
     public void insertar(Producto producto) throws ElementoNoEncontradoException {
         NodoLista nodo = new NodoLista(producto);
@@ -22,25 +18,23 @@ public class ListaEnlazadaOrdenada extends Lista {
         if (estaVacia()) {
             this.nodoInicial = nodo;
             this.nodoFinal = nodo;
+            this.tamaño++;
+            return;
         }
 
         int posicion = encontrarPosicion(producto.getNombre());
 
         if (vaAlInicio(posicion)) {
-
             nodo.setSiguienteNodo(this.nodoInicial);
+            this.nodoInicial.setNodoAnterior(nodo);
             this.nodoInicial = nodo;
-
         } else if (vaAlFinal(posicion)) {
-
             this.nodoFinal.setSiguienteNodo(nodo);
             nodo.setNodoAnterior(this.nodoFinal);
             this.nodoFinal = nodo;
-
         } else {
             NodoLista anterior = obtenerNodo(posicion - 1);
             NodoLista siguiente = anterior.getSiguienteNodo();
-
             anterior.setSiguienteNodo(nodo);
             nodo.setNodoAnterior(anterior);
             nodo.setSiguienteNodo(siguiente);

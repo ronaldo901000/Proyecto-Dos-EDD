@@ -10,9 +10,9 @@ import com.ronaldo.gestor.back.producto.Producto;
  */
 public abstract class Lista {
 
-    private NodoLista nodoInicial;
-    private NodoLista nodoFinal;
-    private int tamaño;
+    protected NodoLista nodoInicial;
+    protected NodoLista nodoFinal;
+    protected int tamaño;
 
     public abstract void insertar(Producto producto) throws ElementoNoEncontradoException;
 

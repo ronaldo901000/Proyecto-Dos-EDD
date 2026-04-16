@@ -3,6 +3,9 @@ package com.ronaldo.gestor.back.estructuras.arbol.b;
 import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
 import com.ronaldo.gestor.back.producto.Producto;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
@@ -151,21 +154,26 @@ public class ArbolB {
 
         ResultadoDivision resultado = new ResultadoDivision();
 
+        int total = nodo.getContador(); 
         int indiceMedio = D;
         Clave claveMediana = nodo.getClavePorIndice(indiceMedio);
 
         NodoB hermanoDerecho = new NodoB(nodo.isHoja());
 
-        for (int i = indiceMedio; i < nodo.getContador(); i++) {
+        int j = 0;
+        for (int i = indiceMedio + 1; i < total; i++) { 
             hermanoDerecho.insetarNuevaClave(nodo.getClavePorIndice(i));
             nodo.setClavePorIndice(i, null);
+            j++;
         }
+        hermanoDerecho.setContador(j);
 
-        if (!nodo.isInterno()) {
-            int j = 0;
-            for (int i = indiceMedio + 1; i <= nodo.getContador(); i++) {
-                hermanoDerecho.setHijoPorIndice(j, nodo.getHijoPorIndice(i));
-                j++;
+        if (nodo.isInterno()) {
+            int k = 0;
+            for (int i = indiceMedio + 1; i <= total; i++) { 
+                hermanoDerecho.setHijoPorIndice(k, nodo.getHijoPorIndice(i));
+                nodo.setHijoPorIndice(i, null);
+                k++;
             }
         }
 
@@ -215,7 +223,7 @@ public class ArbolB {
         return indice;
     }
 
-    private void eliminarRecursivo(NodoB nodo, Clave clave) throws ElementoNoEncontradoException{
+    private void eliminarRecursivo(NodoB nodo, Clave clave) throws ElementoNoEncontradoException {
         int indice = encontrarClave(nodo, clave);
 
         if (indice < nodo.getContador()
@@ -390,5 +398,63 @@ public class ArbolB {
 
         hijo1.setContador(hijo1.getContador() + hijo2.getContador() + 1);
         padre.setContador(padre.getContador() - 1);
+    }
+
+    public void generarDOT(String nombreArchivo) {
+        try (FileWriter fw = new FileWriter(nombreArchivo); PrintWriter pw = new PrintWriter(fw)) {
+
+            pw.println("digraph ArbolB {");
+            pw.println("  node [shape=record, height=.1];");
+
+            if (this.raiz != null) {
+                escribirNodoDot(this.raiz, pw);
+            }
+
+            pw.println("}");
+            System.out.println("Archivo " + nombreArchivo + " generado exitosamente.");
+
+        } catch (IOException e) {
+            System.err.println("Error al abrir el archivo para DOT: " + e.getMessage());
+        }
+    }
+
+    private void escribirNodoDot(NodoB nodo, PrintWriter pw) {
+        if (nodo == null) {
+            return;
+        }
+
+        int idNodo = System.identityHashCode(nodo);
+        int n = nodo.getContador();
+
+        // Construcción del label tipo record
+        StringBuilder label = new StringBuilder();
+
+        for (int i = 0; i < n; i++) {
+            label.append("<hijo").append(i).append("> ");
+            label.append("| { ").append(nodo.getClavePorIndice(i).getFecha())
+                    .append("\\n").append(nodo.getClavePorIndice(i).getProducto().getNombre())
+                    .append(" } | ");
+        }
+
+        // último hijo
+        label.append("<hijo").append(n).append(">");
+
+        pw.println("  nodo" + idNodo + " [label=\"" + label.toString() + "\"];");
+
+        // conexiones
+        if (!nodo.isHoja()) {
+            for (int i = 0; i <= n; i++) {
+                NodoB hijo = nodo.getHijoPorIndice(i);
+
+                if (hijo != null) {
+                    int idHijo = System.identityHashCode(hijo);
+
+                    pw.println("  nodo" + idNodo + ":hijo" + i
+                            + " -> nodo" + idHijo + ";");
+
+                    escribirNodoDot(hijo, pw);
+                }
+            }
+        }
     }
 }

@@ -9,9 +9,6 @@ import com.ronaldo.gestor.back.producto.Producto;
  */
 public class ListaEnlazada extends Lista {
 
-    private int tamaño;
-    private NodoLista nodoInicial;
-    private NodoLista nodoFinal;
 
     @Override
     public void insertar(Producto producto) {

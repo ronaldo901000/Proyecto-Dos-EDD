@@ -16,18 +16,19 @@ public class NodoAVL {
 
     public NodoAVL(Producto elemento) {
         this.elemento = elemento;
+        this.altura = 1;
     }
 
     public void actualizarAltura() {
-        this.altura = Math.max(getAlturaHijo(this.izquierdo), getAlturaHijo(this.derecho));
+        this.altura = Math.max(getAlturaHijo(this.izquierdo), getAlturaHijo(this.derecho)) + 1;
     }
 
     private int getAlturaHijo(NodoAVL hijo) {
-        
+
         if (hijo == null) {
             return 0;
         }
-        
+
         return hijo.getAltura();
     }
 
@@ -56,7 +57,7 @@ public class NodoAVL {
     }
 
     public int getFactorEquilibrio() {
-        return factorEquilibrio;
+        return getAlturaHijo(derecho) - getAlturaHijo(izquierdo);
     }
 
     public void setFactorEquilibrio(int factorEquilibrio) {

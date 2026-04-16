@@ -4,6 +4,9 @@ import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
 import com.ronaldo.gestor.back.producto.Producto;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
@@ -29,7 +32,7 @@ public class ArbolAVL {
      * @return
      * @throws ElementoExistenteException
      */
-    public NodoAVL insertarRecursivo(NodoAVL nodo, Producto producto) throws ElementoExistenteException {
+    private NodoAVL insertarRecursivo(NodoAVL nodo, Producto producto) throws ElementoExistenteException {
         if (nodo == null) {
             return new NodoAVL(producto);
         }
@@ -52,26 +55,28 @@ public class ArbolAVL {
      * @param nodo
      * @return
      */
-    private NodoAVL verificarEquilibrio(NodoAVL nodo) {
+private NodoAVL verificarEquilibrio(NodoAVL nodo) {
+        if (nodo == null) return null;
+        
         nodo.actualizarAltura();
-
         int FE = nodo.getFactorEquilibrio();
 
-        //II
-        if (FE < -1 && nodo.getIzquierdo().getFactorEquilibrio() <= 0) {
-            return equilibrarII(nodo);
+        if (FE < -1) {
+            if (nodo.getIzquierdo() != null && nodo.getIzquierdo().getFactorEquilibrio() <= 0) {
+                return equilibrarII(nodo);
+            }
+            if (nodo.getIzquierdo() != null && nodo.getIzquierdo().getFactorEquilibrio() > 0) {
+                return equilibrarID(nodo);
+            }
         }
-        //ID
-        if (FE < -1 && nodo.getIzquierdo().getFactorEquilibrio() > 0) {
-            return equilibrarID(nodo);
-        }
-        //DD
-        if (FE > 1 & nodo.getDerecho().getFactorEquilibrio() >= 0) {
-            return equilibrarDD(nodo);
-        }
-        //DI
-        if (FE > 1 && nodo.getDerecho().getFactorEquilibrio() < 0) {
-            return equilibrarDI(nodo);
+
+        if (FE > 1) {
+            if (nodo.getDerecho() != null && nodo.getDerecho().getFactorEquilibrio() >= 0) {
+                return equilibrarDD(nodo);
+            }
+            if (nodo.getDerecho() != null && nodo.getDerecho().getFactorEquilibrio() < 0) {
+                return equilibrarDI(nodo);
+            }
         }
 
         return nodo;
@@ -140,10 +145,10 @@ public class ArbolAVL {
      * @param nodo
      * @return
      */
-    private NodoAVL equilibrarDI(NodoAVL nodo) {
-
-        NodoAVL nodo1 = nodo.getDerecho();
-        NodoAVL nodo2 = nodo.getIzquierdo();
+private NodoAVL equilibrarDI(NodoAVL nodo) {
+    
+        NodoAVL nodo1 = nodo.getDerecho(); 
+        NodoAVL nodo2 = nodo1.getIzquierdo();
 
         nodo1.setIzquierdo(nodo2.getDerecho());
         nodo.setDerecho(nodo2.getIzquierdo());
@@ -287,4 +292,45 @@ public class ArbolAVL {
         }
     }
 
+    
+    public void generarDOT(String nombreArchivo) {
+        try (FileWriter fw = new FileWriter(nombreArchivo);
+             PrintWriter pw = new PrintWriter(fw)) {
+
+            pw.println("digraph ArbolAVL {");
+            pw.println("  node [shape=circle, height=.1];");
+
+            if (this.raiz != null) {
+                escribirNodoDot(this.raiz, pw);
+            }
+
+            pw.println("}");
+            System.out.println("Archivo " + nombreArchivo + " generado exitosamente.");
+
+        } catch (IOException e) {
+            System.err.println("Error al abrir el archivo para DOT: " + e.getMessage());
+        }
+    }
+
+    private void escribirNodoDot(NodoAVL nodo, PrintWriter pw) {
+        if (nodo == null) return;
+
+        // Usamos identityHashCode para replicar el comportamiento de la dirección de memoria de C++
+        int idNodo = System.identityHashCode(nodo);
+
+        pw.println("  nodo" + idNodo + " [label=\"" 
+                   + nodo.getElemento().getNombre() + " (FE:" + nodo.getFactorEquilibrio() + ")\"];");
+
+        if (nodo.getIzquierdo() != null) {
+            int idIzq = System.identityHashCode(nodo.getIzquierdo());
+            pw.println("  nodo" + idNodo + " -> nodo" + idIzq + " [label=\"I\"];");
+            escribirNodoDot(nodo.getIzquierdo(), pw);
+        }
+
+        if (nodo.getDerecho() != null) {
+            int idDer = System.identityHashCode(nodo.getDerecho());
+            pw.println("  nodo" + idNodo + " -> nodo" + idDer + " [label=\"D\"];");
+            escribirNodoDot(nodo.getDerecho(), pw);
+        }
+    }
 }
