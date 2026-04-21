@@ -1,8 +1,14 @@
-package com.ronaldo.gestor.back.producto.sucursal;
+package com.ronaldo.gestor.back.sucursal;
 
 import com.ronaldo.gestor.back.estructuras.arbol.avl.ArbolAVL;
 import com.ronaldo.gestor.back.estructuras.arbol.b.ArbolB;
 import com.ronaldo.gestor.back.estructuras.arbol.bmas.ArbolBMas;
+import com.ronaldo.gestor.back.estructuras.grafo.Arista;
+import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
+import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
+import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
+import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
+import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.producto.Producto;
 
 /**
@@ -17,10 +23,12 @@ public class Sucursal {
     private int tiempoIngreso;
     private int tiempoTraspaso;
     private int intervaloDespacho;
-
+    private Arista cabezaLista;
+    private Sucursal siguiente;
     private ArbolAVL avl;
     private ArbolB b;
     private ArbolBMas bMas;
+    private int totalNuevosInsertados;
 
     public Sucursal(String id, String nombre, String ubicacion, int tiempoIngreso, int tiempoTraspaso, int intervaloDespacho) {
         this.id = id;
@@ -36,6 +44,19 @@ public class Sucursal {
 
     public void insertarProducto(Producto producto) {
         //insertar en todas las estructuras
+    }
+
+    public void insertarListaProductos(ListaEnlazada nuevos) throws ElementoExistenteException, ElementoNoEncontradoException {
+        totalNuevosInsertados = 0;
+        if (nuevos == null) return;
+        
+        for (int i = 0; i < nuevos.getTamaño(); i++) {
+            Producto p = nuevos.obtener(i);
+            avl.insertar(p);
+            b.insertar(p);
+            bMas.insertar(p);
+            totalNuevosInsertados++;
+        }
     }
 
     public String getId() {
@@ -110,4 +131,26 @@ public class Sucursal {
         this.bMas = bMas;
     }
 
+    public Arista getCabezaLista() {
+        return cabezaLista;
+    }
+
+    public void setCabezaLista(Arista cabezaLista) {
+        this.cabezaLista = cabezaLista;
+    }
+
+    public Sucursal getSiguiente() {
+        return siguiente;
+    }
+
+    public void setSiguiente(Sucursal siguiente) {
+        this.siguiente = siguiente;
+    }
+
+    public int getTotalNuevosInsertados() {
+        return totalNuevosInsertados;
+    }
+
+    
+    
 }

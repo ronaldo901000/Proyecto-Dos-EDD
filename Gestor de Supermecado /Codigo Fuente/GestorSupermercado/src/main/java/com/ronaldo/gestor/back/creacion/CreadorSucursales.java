@@ -4,7 +4,7 @@ import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
 import com.ronaldo.gestor.back.exceptions.DatoInvalidoException;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ListaException;
-import com.ronaldo.gestor.back.producto.sucursal.Sucursal;
+import com.ronaldo.gestor.back.sucursal.Sucursal;
 
 /**
  *

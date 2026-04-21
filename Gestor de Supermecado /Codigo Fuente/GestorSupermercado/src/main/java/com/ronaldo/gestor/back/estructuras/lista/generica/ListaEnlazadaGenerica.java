@@ -65,30 +65,6 @@ public class ListaEnlazadaGenerica<T> {
         return actual;
     }
 
-    public T eliminarUltimo() throws ListaException {
-        if (estaVacia()) {
-            throw new ListaException("La lista esta vacia");
-        }
-        if (tamaño == 1) {
-            T valorUltimo = inicio.getValor();
-            inicio = null;
-            fin = null;
-
-            tamaño--;
-
-            return valorUltimo;
-        }
-
-        NodoGenerico<T> penultimo = obtenerNodo(tamaño - 2);
-        T valorUltimo = fin.getValor();
-
-        penultimo.setSiguiente(null);
-        fin = penultimo;
-
-        tamaño--;
-
-        return valorUltimo;
-    }
 
     public boolean estaVacia() {
         return inicio == null;

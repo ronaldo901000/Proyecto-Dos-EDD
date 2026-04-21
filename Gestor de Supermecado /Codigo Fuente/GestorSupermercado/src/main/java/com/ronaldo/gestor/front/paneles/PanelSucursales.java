@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.ronaldo.gestor.front.paneles;
 
 import com.ronaldo.gestor.back.controlador.Controlador;
 import com.ronaldo.gestor.back.exceptions.ListaException;
-import com.ronaldo.gestor.back.producto.sucursal.Sucursal;
-import com.ronaldo.gestor.front.dialogs.DialogNuevaSucursal;
+import com.ronaldo.gestor.back.sucursal.Sucursal;
+import com.ronaldo.gestor.front.dialogs.NuevaSucursalDialog;
 import com.ronaldo.gestor.front.frame.FrameGeneral;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -43,6 +39,7 @@ public class PanelSucursales extends javax.swing.JPanel {
         tablaSucursales = new javax.swing.JTable();
         btnSalir = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
+        btnImprimir = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 255, 204));
 
@@ -54,7 +51,7 @@ public class PanelSucursales extends javax.swing.JPanel {
         jLabel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
         jLabel1.setOpaque(true);
 
-        tablaSucursales.setFont(new java.awt.Font("Liberation Sans", 0, 18)); // NOI18N
+        tablaSucursales.setFont(new java.awt.Font("Liberation Sans", 0, 17)); // NOI18N
         tablaSucursales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -62,7 +59,15 @@ public class PanelSucursales extends javax.swing.JPanel {
             new String [] {
                 "No.", "ID", "NOMBRE", "UBICACION", "TIEMPO DE INGRESO", "TIEMPO DE PREPARACION", "INTERVALO DE DESPACHO"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tablaSucursales);
 
         btnSalir.setText("REGRESAR");
@@ -70,6 +75,9 @@ public class PanelSucursales extends javax.swing.JPanel {
 
         btnAgregar.setText("AGREGAR ");
         btnAgregar.addActionListener(this::btnAgregarActionPerformed);
+
+        btnImprimir.setText("IMPRIMIR");
+        btnImprimir.addActionListener(this::btnImprimirActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -87,6 +95,10 @@ public class PanelSucursales extends javax.swing.JPanel {
                         .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(438, 438, 438)
+                .addComponent(btnImprimir)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,7 +106,9 @@ public class PanelSucursales extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
-                .addGap(38, 38, 38)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnImprimir)
+                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -107,22 +121,26 @@ public class PanelSucursales extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        DialogNuevaSucursal dialog = new DialogNuevaSucursal(this.controlador.getSucursales());
+        NuevaSucursalDialog dialog = new NuevaSucursalDialog(this.controlador.getGrafo().getLista());
         dialog.setVisible(true);
         cargarTabla();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
+        controlador.getGrafo().mostrarGrafo();
+    }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void cargarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) tablaSucursales.getModel();
         
         modelo.setRowCount(0); 
         
-        for (int i = 0; i < controlador.getSucursales().getTamaño(); i++) {
+        for (int i = 0; i < controlador.getGrafo().getLista().getTamaño(); i++) {
             try {
-                Sucursal sucursal = controlador.getSucursales().obtenerValor(i);
+                Sucursal sucursal = controlador.getGrafo().getLista().obtenerValor(i);
 
                 modelo.addRow(new Object[]{
-                    i,
+                    (i+1),
                     sucursal.getId(),
                     sucursal.getNombre(),
                     sucursal.getUbicacion(),
@@ -139,6 +157,7 @@ public class PanelSucursales extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnImprimir;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

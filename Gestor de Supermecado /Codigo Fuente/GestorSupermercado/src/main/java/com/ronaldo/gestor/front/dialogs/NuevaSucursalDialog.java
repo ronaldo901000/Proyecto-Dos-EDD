@@ -5,20 +5,20 @@ import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
 import com.ronaldo.gestor.back.exceptions.DatoInvalidoException;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ListaException;
-import com.ronaldo.gestor.back.producto.sucursal.Sucursal;
+import com.ronaldo.gestor.back.sucursal.Sucursal;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author ronaldo
  */
-public class DialogNuevaSucursal extends javax.swing.JDialog {
+public class NuevaSucursalDialog extends javax.swing.JDialog {
     
     private ListaEnlazadaGenerica<Sucursal> sucursales;
     /**
      * Creates new form DialogNuevaSucursal
      */
-    public DialogNuevaSucursal(ListaEnlazadaGenerica<Sucursal> sucursales) {
+    public NuevaSucursalDialog(ListaEnlazadaGenerica<Sucursal> sucursales) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.sucursales = sucursales;

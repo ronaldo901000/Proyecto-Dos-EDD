@@ -55,9 +55,11 @@ public class ArbolAVL {
      * @param nodo
      * @return
      */
-private NodoAVL verificarEquilibrio(NodoAVL nodo) {
-        if (nodo == null) return null;
-        
+    private NodoAVL verificarEquilibrio(NodoAVL nodo) {
+        if (nodo == null) {
+            return null;
+        }
+
         nodo.actualizarAltura();
         int FE = nodo.getFactorEquilibrio();
 
@@ -145,9 +147,9 @@ private NodoAVL verificarEquilibrio(NodoAVL nodo) {
      * @param nodo
      * @return
      */
-private NodoAVL equilibrarDI(NodoAVL nodo) {
-    
-        NodoAVL nodo1 = nodo.getDerecho(); 
+    private NodoAVL equilibrarDI(NodoAVL nodo) {
+
+        NodoAVL nodo1 = nodo.getDerecho();
         NodoAVL nodo2 = nodo1.getIzquierdo();
 
         nodo1.setIzquierdo(nodo2.getDerecho());
@@ -169,11 +171,11 @@ private NodoAVL equilibrarDI(NodoAVL nodo) {
      * @return
      * @throws ElementoNoEncontradoException
      */
-    public Producto buscar(String nombre) throws ElementoNoEncontradoException {
+    public Producto buscar(String nombre) {
         NodoAVL nodo = buscarRecursivo(raiz, nombre);
 
         if (nodo == null) {
-            throw new ElementoNoEncontradoException("Producto con nombre " + nombre + " no encontrado en AVL");
+            return null;
         }
         return nodo.getElemento();
     }
@@ -268,8 +270,8 @@ private NodoAVL equilibrarDI(NodoAVL nodo) {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public ListaEnlazada listar() {
         ListaEnlazada lista = new ListaEnlazada();
@@ -278,12 +280,12 @@ private NodoAVL equilibrarDI(NodoAVL nodo) {
 
         return lista;
     }
-    /**
-     * 
-     * @param nodo
-     * @param lista 
-     */
 
+    /**
+     *
+     * @param nodo
+     * @param lista
+     */
     private void listarInOrden(NodoAVL nodo, ListaEnlazada lista) {
         if (nodo != null) {
             listarInOrden(nodo.getIzquierdo(), lista);
@@ -292,10 +294,8 @@ private NodoAVL equilibrarDI(NodoAVL nodo) {
         }
     }
 
-    
     public void generarDOT(String nombreArchivo) {
-        try (FileWriter fw = new FileWriter(nombreArchivo);
-             PrintWriter pw = new PrintWriter(fw)) {
+        try (FileWriter fw = new FileWriter(nombreArchivo); PrintWriter pw = new PrintWriter(fw)) {
 
             pw.println("digraph ArbolAVL {");
             pw.println("  node [shape=circle, height=.1];");
@@ -313,13 +313,15 @@ private NodoAVL equilibrarDI(NodoAVL nodo) {
     }
 
     private void escribirNodoDot(NodoAVL nodo, PrintWriter pw) {
-        if (nodo == null) return;
+        if (nodo == null) {
+            return;
+        }
 
         // Usamos identityHashCode para replicar el comportamiento de la dirección de memoria de C++
         int idNodo = System.identityHashCode(nodo);
 
-        pw.println("  nodo" + idNodo + " [label=\"" 
-                   + nodo.getElemento().getNombre() + " (FE:" + nodo.getFactorEquilibrio() + ")\"];");
+        pw.println("  nodo" + idNodo + " [label=\""
+                + nodo.getElemento().getNombre() + " (FE:" + nodo.getFactorEquilibrio() + ")\"];");
 
         if (nodo.getIzquierdo() != null) {
             int idIzq = System.identityHashCode(nodo.getIzquierdo());

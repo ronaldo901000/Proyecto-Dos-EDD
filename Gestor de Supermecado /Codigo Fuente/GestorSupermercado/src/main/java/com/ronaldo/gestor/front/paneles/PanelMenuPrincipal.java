@@ -5,6 +5,11 @@
 package com.ronaldo.gestor.front.paneles;
 
 import com.ronaldo.gestor.back.controlador.Controlador;
+import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
+import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
+import com.ronaldo.gestor.back.exceptions.ListaException;
+import com.ronaldo.gestor.back.sucursal.Sucursal;
+import com.ronaldo.gestor.front.dialogs.CargaCSVDialog;
 import com.ronaldo.gestor.front.frame.FrameGeneral;
 
 /**
@@ -32,7 +37,7 @@ public class PanelMenuPrincipal extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        btnCargarCSV = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 255, 204));
@@ -48,11 +53,11 @@ public class PanelMenuPrincipal extends javax.swing.JPanel {
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         jPanel1.setOpaque(false);
 
-        jButton2.setBackground(new java.awt.Color(26, 115, 232));
-        jButton2.setFont(new java.awt.Font("Ubuntu Sans Mono", 1, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("CARGA DE CSV");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnCargarCSV.setBackground(new java.awt.Color(26, 115, 232));
+        btnCargarCSV.setFont(new java.awt.Font("Ubuntu Sans Mono", 1, 18)); // NOI18N
+        btnCargarCSV.setForeground(new java.awt.Color(255, 255, 255));
+        btnCargarCSV.setText("CARGA DE CSV");
+        btnCargarCSV.addActionListener(this::btnCargarCSVActionPerformed);
 
         jButton4.setBackground(new java.awt.Color(26, 115, 232));
         jButton4.setFont(new java.awt.Font("Ubuntu Sans Mono", 1, 18)); // NOI18N
@@ -68,14 +73,14 @@ public class PanelMenuPrincipal extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCargarCSV, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(90, 90, 90)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCargarCSV, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(94, Short.MAX_VALUE))
@@ -101,9 +106,23 @@ public class PanelMenuPrincipal extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnCargarCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarCSVActionPerformed
+        CargaCSVDialog dialog = new CargaCSVDialog(controlador);
+        dialog.setVisible(true);
+        ListaEnlazadaGenerica<Sucursal> nuevos = dialog.getSucursales();
+        
+        if(nuevos == null){
+            return;
+        }
+        for (int i = 0; i < nuevos.getTamaño(); i++) {
+            try {
+                this.controlador.getGrafo().agregarSucursal(nuevos.obtenerValor(i));
+            } catch (ListaException | ElementoExistenteException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        
+    }//GEN-LAST:event_btnCargarCSVActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         FrameGeneral.ponerPanelEnFramePrincipal(new PanelSucursales(controlador));
@@ -111,7 +130,7 @@ public class PanelMenuPrincipal extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnCargarCSV;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

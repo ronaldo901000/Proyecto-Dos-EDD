@@ -1,24 +1,29 @@
 package com.ronaldo.gestor.back.controlador;
 
-import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
-import com.ronaldo.gestor.back.producto.sucursal.Sucursal;
-
+import com.ronaldo.gestor.back.estructuras.grafo.Grafo;
+import com.ronaldo.gestor.back.lectura.LectorConexiones;
 /**
  *
  * @author ronaldo
  */
 public class Controlador {
-
-    private ListaEnlazadaGenerica<Sucursal> sucursales;
+    
+    private Grafo grafo;
+    private LectorConexiones lConexiones;
+    
 
     public Controlador() {
-        this.sucursales = new ListaEnlazadaGenerica<>();
+        grafo = new Grafo();
+        lConexiones = new LectorConexiones(grafo);
     }
 
-    public ListaEnlazadaGenerica<Sucursal> getSucursales() {
-        return sucursales;
+    public Grafo getGrafo() {
+        return grafo;
     }
 
-    
+    public LectorConexiones getlConexiones() {
+        return lConexiones;
+    }
+
     
 }

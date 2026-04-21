@@ -1,0 +1,6 @@
+id,nombre,ubicacion,tiempo_ingreso,tiempo_traspaso,intervalo_despacho
+SUC-001,Supermercado Central,Zona 1 Quetzaltenango,5,10,15
+SUC-002,Despensa Norte,Zona 3 Quetzaltenango,3,8,12
+SUC-003,Market Sur,San Mateo,4,12,20
+SUC-004,Express Oriente,Zona 10 Quetzaltenango,2,5,10
+SUC-005,Bodega Intermedia,La Esperanza,"45",15,25
