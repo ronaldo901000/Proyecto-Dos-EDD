@@ -2,6 +2,7 @@ package com.ronaldo.gestor.front.paneles;
 
 import com.ronaldo.gestor.back.controlador.Controlador;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
+import com.ronaldo.gestor.front.dialogs.NuevaSucursalDialog;
 import com.ronaldo.gestor.front.frame.FrameGeneral;
 import javax.swing.JOptionPane;
 
@@ -13,9 +14,11 @@ public class PanelSucursal extends javax.swing.JPanel {
 
     private Sucursal sucursal;
     private Controlador controlador;
+    private PanelPrincipal panel;
 
-    public PanelSucursal(Sucursal sucursal, Controlador controlador) {
+    public PanelSucursal(Sucursal sucursal, Controlador controlador, PanelPrincipal panel) {
         initComponents();
+        this.panel= panel;
         this.sucursal = sucursal;
         this.controlador = controlador;
         txtID.setText(sucursal.getId());
@@ -30,6 +33,7 @@ public class PanelSucursal extends javax.swing.JPanel {
         txtNombre1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 255, 204));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -40,13 +44,21 @@ public class PanelSucursal extends javax.swing.JPanel {
 
         jButton1.setBackground(new java.awt.Color(0, 204, 102));
         jButton1.setFont(new java.awt.Font("Liberation Sans", 1, 16)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
         jButton1.setText("IR");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
         btnEliminar.setBackground(new java.awt.Color(255, 51, 51));
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 16)); // NOI18N
-        btnEliminar.setText("Eliminar");
+        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEliminar.setText("ELIMIAR");
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
+
+        btnEditar.setBackground(new java.awt.Color(255, 204, 51));
+        btnEditar.setFont(new java.awt.Font("Liberation Sans", 1, 16)); // NOI18N
+        btnEditar.setForeground(new java.awt.Color(0, 0, 0));
+        btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(this::btnEditarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -54,27 +66,33 @@ public class PanelSucursal extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNombre1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnEditar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addGap(21, 21, 21)
                 .addComponent(btnEliminar)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtID, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                            .addComponent(txtNombre1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -92,7 +110,7 @@ public class PanelSucursal extends javax.swing.JPanel {
            
         } else {
             System.out.println("Seleccionaste: CANCELAR o cerraste la ventana");
-            // Aquí va tu lógica para "Cancelar"
+            
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -100,8 +118,15 @@ public class PanelSucursal extends javax.swing.JPanel {
          FrameGeneral.ponerPanelEnFramePrincipal(new PanelMenuSucursal(sucursal, controlador));
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        NuevaSucursalDialog dialog = new NuevaSucursalDialog(controlador.getGrafo(), true, sucursal);
+        dialog.setVisible(true);
+        panel.cargarSucursales();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel txtID;

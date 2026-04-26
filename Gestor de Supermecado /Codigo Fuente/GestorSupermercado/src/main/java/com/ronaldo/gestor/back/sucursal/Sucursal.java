@@ -5,6 +5,7 @@ import com.ronaldo.gestor.back.estructuras.arbol.b.ArbolB;
 import com.ronaldo.gestor.back.estructuras.arbol.b.Clave;
 import com.ronaldo.gestor.back.estructuras.arbol.bmas.ArbolBMas;
 import com.ronaldo.gestor.back.estructuras.grafo.Arista;
+import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
 import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.estructuras.lista.ordenada.ListaEnlazadaOrdenada;
 import com.ronaldo.gestor.back.estructuras.tablaHash.TablaHash;
@@ -108,12 +109,12 @@ public class Sucursal {
         }
     }
 
-    public void eliminar(String codigoBarra) throws ElementoNoEncontradoException, EstructuraVaciaException{
-        
+    public void eliminar(String codigoBarra) throws ElementoNoEncontradoException, EstructuraVaciaException {
+
         Producto p = this.tablaHash.buscar(codigoBarra);
-        
-        if(p == null){
-            throw new ElementoNoEncontradoException("El codigo de barras "+ codigoBarra +" no pertenece a ningun producto.");
+
+        if (p == null) {
+            throw new ElementoNoEncontradoException("El codigo de barras " + codigoBarra + " no pertenece a ningun producto.");
         }
         Clave clave = new Clave(p);
         tablaHash.eliminar(codigoBarra);
@@ -122,9 +123,29 @@ public class Sucursal {
         b.eliminar(clave);
         listaDesordenada.eliminar(codigoBarra);
         listaOrdenada.eliminar(codigoBarra);
-        
+
     }
-    
+
+    public void editar(Sucursal s) {
+        nombre = s.getNombre();
+        ubicacion = s.getUbicacion();
+        tiempoIngreso = s.getTiempoIngreso();
+        tiempoTraspaso = s.getTiempoTraspaso();
+        intervaloDespacho = s.getIntervaloDespacho();
+    }
+
+    public ListaEnlazadaGenerica<Arista> getListaConexiones() {
+        ListaEnlazadaGenerica<Arista> lista = new ListaEnlazadaGenerica<>();
+
+        Arista a = this.cabezaLista;
+
+        while (a != null) {
+            lista.agregarElemento(a);
+            a = a.getSiguiente();
+        }
+        return lista;
+    }
+
     public String getId() {
         return id;
     }

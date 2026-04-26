@@ -6,6 +6,7 @@ import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
 import com.ronaldo.gestor.front.dialogs.CargaCSVDialog;
+import com.ronaldo.gestor.front.dialogs.NuevaSucursalDialog;
 import java.awt.Dimension;
 import javax.swing.BoxLayout;
 
@@ -32,9 +33,8 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        btnTranferencias = new javax.swing.JButton();
+        btnNuevaSucursal = new javax.swing.JButton();
         btnTranferencias1 = new javax.swing.JButton();
-        btnTranferencias5 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         btnTranferencias2 = new javax.swing.JButton();
@@ -70,11 +70,10 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Operaciones");
 
-        btnTranferencias.setText("Transferencias");
+        btnNuevaSucursal.setText("Nueva Sucursal");
+        btnNuevaSucursal.addActionListener(this::btnNuevaSucursalActionPerformed);
 
-        btnTranferencias1.setText("Busqueda");
-
-        btnTranferencias5.setText("Eliminacion");
+        btnTranferencias1.setText("Tranferencia");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -84,9 +83,8 @@ public class PanelPrincipal extends javax.swing.JPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnTranferencias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTranferencias1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                    .addComponent(btnTranferencias5, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
+                    .addComponent(btnNuevaSucursal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnTranferencias1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -94,12 +92,10 @@ public class PanelPrincipal extends javax.swing.JPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addComponent(btnTranferencias, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNuevaSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnTranferencias1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnTranferencias5, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         jPanel8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
@@ -392,13 +388,21 @@ public class PanelPrincipal extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnCargarCSVActionPerformed
 
-    private void cargarSucursales() {
+    private void btnNuevaSucursalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaSucursalActionPerformed
+        NuevaSucursalDialog dialog = new NuevaSucursalDialog(controlador.getGrafo(), false, null);
+        dialog.setVisible(true);
+        cargarSucursales();
+    }//GEN-LAST:event_btnNuevaSucursalActionPerformed
+
+    public void cargarSucursales() {
+        panelListaSucursales.removeAll();
+
         int nSucursales = controlador.getGrafo().getTotalSucursales();
         txtTotalSucursales.setText(String.valueOf(nSucursales));
         for (int i = 0; i < controlador.getGrafo().getTotalSucursales(); i++) {
             try {
                 Sucursal s = controlador.getGrafo().getLista().obtenerValor(i);
-                PanelSucursal ps = new PanelSucursal(s, controlador);
+                PanelSucursal ps = new PanelSucursal(s, controlador, this);
                 ps.setMaximumSize(new Dimension(Integer.MAX_VALUE, ps.getPreferredSize().height));
 
                 panelListaSucursales.add(ps);
@@ -408,16 +412,18 @@ public class PanelPrincipal extends javax.swing.JPanel {
 
         }
 
+        panelListaSucursales.revalidate();
+        panelListaSucursales.repaint();
+
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarCSV;
-    private javax.swing.JButton btnTranferencias;
+    private javax.swing.JButton btnNuevaSucursal;
     private javax.swing.JButton btnTranferencias1;
     private javax.swing.JButton btnTranferencias2;
     private javax.swing.JButton btnTranferencias3;
     private javax.swing.JButton btnTranferencias4;
-    private javax.swing.JButton btnTranferencias5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

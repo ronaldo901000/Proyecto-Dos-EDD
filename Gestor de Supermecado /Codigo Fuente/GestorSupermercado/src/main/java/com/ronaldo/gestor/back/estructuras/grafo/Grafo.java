@@ -60,13 +60,13 @@ public class Grafo {
         System.out.println("CONEXIONES:");
         int i = 1;
         while (sucursal != null) {
-            
-            System.out.println(i+". "+ sucursal.getNombre()+ " "+ sucursal.getId());
-            
+
+            System.out.println(i + ". " + sucursal.getNombre() + " " + sucursal.getId());
+
             Arista arista = sucursal.getCabezaLista();
-            
-            while(arista != null){
-                System.out.println("    -> "+ arista.getIdDestino());
+
+            while (arista != null) {
+                System.out.println("    -> " + arista.getIdDestino());
                 arista = arista.getSiguiente();
             }
             sucursal = sucursal.getSiguiente();
@@ -133,8 +133,5 @@ public class Grafo {
     public BuscadorSucursales getBuscador() {
         return buscador;
     }
-    
-    
-    
-    
+
 }

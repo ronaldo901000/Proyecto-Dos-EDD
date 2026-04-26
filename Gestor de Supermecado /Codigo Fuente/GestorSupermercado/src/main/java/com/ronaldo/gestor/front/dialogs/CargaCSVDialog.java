@@ -292,6 +292,10 @@ public class CargaCSVDialog extends javax.swing.JDialog {
                     //pedir sucursal
                     Sucursal sucursal = dialog.getSeleccionado();
 
+                    if(sucursal ==null){
+                        return;
+                    }
+                    
                     ListaEnlazada nuevosProductos = lector.leerCSVProductos(ruta);
 
                     sucursal.insertarListaProductos(nuevosProductos);

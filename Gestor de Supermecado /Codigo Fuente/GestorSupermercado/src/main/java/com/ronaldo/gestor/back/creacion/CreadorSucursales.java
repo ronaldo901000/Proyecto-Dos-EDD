@@ -14,12 +14,15 @@ public class CreadorSucursales {
 
     public Sucursal crearSucursal(String id, String nombre,
             String ubicacion, int tiempoIngreso,
-            int tiempoTraspaso, int intervaloDespacho, ListaEnlazadaGenerica<Sucursal> sucursales) throws DatoInvalidoException, ListaException, ElementoExistenteException {
+            int tiempoTraspaso, int intervaloDespacho, ListaEnlazadaGenerica<Sucursal> sucursales, boolean esEdicion) throws DatoInvalidoException, ListaException, ElementoExistenteException {
 
         cadenaValida(id, "ID");
         cadenaValida(nombre, "NOMBRE");
         cadenaValida(ubicacion, "UBICACION");
-        verificarExistencia(id, sucursales);
+        if (!esEdicion) {
+            verificarExistencia(id, sucursales);
+        }
+
         return new Sucursal(id, nombre, ubicacion, tiempoIngreso, tiempoTraspaso, intervaloDespacho);
 
     }

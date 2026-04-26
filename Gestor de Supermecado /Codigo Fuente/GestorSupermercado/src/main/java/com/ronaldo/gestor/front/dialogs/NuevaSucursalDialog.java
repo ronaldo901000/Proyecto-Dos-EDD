@@ -1,7 +1,7 @@
 package com.ronaldo.gestor.front.dialogs;
 
 import com.ronaldo.gestor.back.creacion.CreadorSucursales;
-import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
+import com.ronaldo.gestor.back.estructuras.grafo.Grafo;
 import com.ronaldo.gestor.back.exceptions.DatoInvalidoException;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ListaException;
@@ -13,15 +13,31 @@ import javax.swing.JOptionPane;
  * @author ronaldo
  */
 public class NuevaSucursalDialog extends javax.swing.JDialog {
-    
-    private ListaEnlazadaGenerica<Sucursal> sucursales;
+
+    private Grafo grafo;
+    private boolean esEdicion;
+    private Sucursal sucursal;
+
     /**
      * Creates new form DialogNuevaSucursal
      */
-    public NuevaSucursalDialog(ListaEnlazadaGenerica<Sucursal> sucursales) {
+    public NuevaSucursalDialog(Grafo grafo, boolean esEdicion, Sucursal sucursal) {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.sucursales = sucursales;
+        this.grafo = grafo;
+        this.esEdicion = esEdicion;
+        this.sucursal = sucursal;
+
+        if (esEdicion) {
+            txtID.setText(sucursal.getId());
+            txtID.setEditable(false);
+            txtNombre.setText(sucursal.getNombre());
+            txtUbicacion.setText(sucursal.getUbicacion());
+            spnTIngreso.setValue(sucursal.getTiempoIngreso());
+            spnTPreparacion.setValue(sucursal.getTiempoTraspaso());
+            spnIDespacho.setValue(sucursal.getIntervaloDespacho());
+            btnCrear.setText("EDITAR");
+        }
     }
 
     /**
@@ -237,20 +253,37 @@ public class NuevaSucursalDialog extends javax.swing.JDialog {
         int tIngreso = (int) spnTIngreso.getValue();
         int tPreparacion = (int) spnTPreparacion.getValue();
         int intervaloDespacho = (int) spnIDespacho.getValue();
-        
+
         CreadorSucursales creador = new CreadorSucursales();
-        
+        String mensaje = "";
         try {
-            Sucursal s = creador.crearSucursal(id, nombre, ubicacion, tIngreso, tPreparacion, intervaloDespacho, sucursales);
-            sucursales.agregarElemento(s);
-            this.dispose();
-            JOptionPane.showMessageDialog(this, "Creacion exitosa", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            Sucursal s = creador.crearSucursal(
+                    id, 
+                    nombre,
+                    ubicacion, 
+                    tIngreso, 
+                    tPreparacion, 
+                    intervaloDespacho, 
+                    grafo.getLista(), 
+                    esEdicion
+            );
             
+            if(esEdicion){
+                this.sucursal.editar(s);
+                mensaje = "Edicion exitosa";
+            }
+            else{
+                grafo.agregarSucursal(s);
+                mensaje = "Creacion exitosa";
+            }
+            
+            this.dispose();
+            JOptionPane.showMessageDialog(this, mensaje, "Exito", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (DatoInvalidoException | ElementoExistenteException | ListaException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
-         
+
     }//GEN-LAST:event_btnCrearActionPerformed
 
 
