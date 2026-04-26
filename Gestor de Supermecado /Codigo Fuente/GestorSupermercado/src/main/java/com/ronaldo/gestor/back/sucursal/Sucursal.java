@@ -2,6 +2,7 @@ package com.ronaldo.gestor.back.sucursal;
 
 import com.ronaldo.gestor.back.estructuras.arbol.avl.ArbolAVL;
 import com.ronaldo.gestor.back.estructuras.arbol.b.ArbolB;
+import com.ronaldo.gestor.back.estructuras.arbol.b.Clave;
 import com.ronaldo.gestor.back.estructuras.arbol.bmas.ArbolBMas;
 import com.ronaldo.gestor.back.estructuras.grafo.Arista;
 import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
@@ -9,6 +10,7 @@ import com.ronaldo.gestor.back.estructuras.lista.ordenada.ListaEnlazadaOrdenada;
 import com.ronaldo.gestor.back.estructuras.tablaHash.TablaHash;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
+import com.ronaldo.gestor.back.exceptions.EstructuraVaciaException;
 import com.ronaldo.gestor.back.producto.Producto;
 import com.ronaldo.gestor.back.verificacion.VerificadorDeProductos;
 
@@ -106,6 +108,23 @@ public class Sucursal {
         }
     }
 
+    public void eliminar(String codigoBarra) throws ElementoNoEncontradoException, EstructuraVaciaException{
+        
+        Producto p = this.tablaHash.buscar(codigoBarra);
+        
+        if(p == null){
+            throw new ElementoNoEncontradoException("El codigo de barras "+ codigoBarra +" no pertenece a ningun producto.");
+        }
+        Clave clave = new Clave(p);
+        tablaHash.eliminar(codigoBarra);
+        avl.eliminar(p.getNombre(), p.getCodigoBarra());
+        bMas.eliminar(codigoBarra, p.getCategoria());
+        b.eliminar(clave);
+        listaDesordenada.eliminar(codigoBarra);
+        listaOrdenada.eliminar(codigoBarra);
+        
+    }
+    
     public String getId() {
         return id;
     }

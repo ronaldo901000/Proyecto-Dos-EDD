@@ -409,6 +409,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
         }
 
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarCSV;
     private javax.swing.JButton btnTranferencias;

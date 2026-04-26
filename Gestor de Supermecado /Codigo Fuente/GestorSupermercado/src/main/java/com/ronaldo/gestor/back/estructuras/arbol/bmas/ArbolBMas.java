@@ -100,99 +100,95 @@ public class ArbolBMas {
         }
     }
 
-private ResultadoDivision dividirNodo(NodoBMas nodo) throws ElementoNoEncontradoException {
+    private ResultadoDivision dividirNodo(NodoBMas nodo) throws ElementoNoEncontradoException {
 
-    ResultadoDivision res = new ResultadoDivision();
-    int total = nodo.getContadorClaves();
-    int medio = D;
+        ResultadoDivision res = new ResultadoDivision();
+        int total = nodo.getContadorClaves();
+        int medio = D;
 
-    NodoBMas hermanoDerecho = new NodoBMas(nodo.isEsHoja());
+        NodoBMas hermanoDerecho = new NodoBMas(nodo.isEsHoja());
 
-    if (nodo.isEsHoja()) {
+        if (nodo.isEsHoja()) {
 
-        int j = 0;
+            int j = 0;
 
-        for (int i = medio; i < total; i++) {
+            for (int i = medio; i < total; i++) {
 
-            ClaveColeccion original = nodo.getClaveColeccionPorIndice(i);
+                ClaveColeccion original = nodo.getClaveColeccionPorIndice(i);
 
-            // 🔥 CREAR NUEVA CLAVE (NO REFERENCIA)
-            ClaveColeccion nueva = new ClaveColeccion();
-            nueva.setCategoria(original.getCategoria());
+                ClaveColeccion nueva = new ClaveColeccion();
+                nueva.setCategoria(original.getCategoria());
 
-            // 🔥 COPIAR LA LISTA
-            if (original.getColeccion() != null) {
+                if (original.getColeccion() != null) {
 
-                ListaEnlazadaOrdenada nuevaLista = new ListaEnlazadaOrdenada();
+                    ListaEnlazadaOrdenada nuevaLista = new ListaEnlazadaOrdenada();
 
-                for (int k = 0; k < original.getColeccion().getTamaño(); k++) {
-                    nuevaLista.insertar(original.getColeccion().obtener(k));
+                    for (int k = 0; k < original.getColeccion().getTamaño(); k++) {
+                        nuevaLista.insertar(original.getColeccion().obtener(k));
+                    }
+
+                    nueva.setColeccion(nuevaLista);
                 }
 
-                nueva.setColeccion(nuevaLista);
+                hermanoDerecho.setClavePorIndice(j, nueva);
+                j++;
             }
 
-            hermanoDerecho.setClavePorIndice(j, nueva);
-            j++;
+            hermanoDerecho.setContadorClaves(j);
+
+            for (int i = medio; i < total; i++) {
+                nodo.setClavePorIndice(i, null);
+            }
+
+            nodo.setContadorClaves(medio);
+
+            ClaveColeccion claveSubir = new ClaveColeccion();
+            claveSubir.setCategoria(
+                    hermanoDerecho.getClaveColeccionPorIndice(0).getCategoria()
+            );
+
+            res.setClaveMediana(claveSubir);
+
+        } else {
+
+            ClaveColeccion claveMediana = nodo.getClaveColeccionPorIndice(medio);
+
+            int j = 0;
+
+            for (int i = medio + 1; i < total; i++) {
+
+                ClaveColeccion original = nodo.getClaveColeccionPorIndice(i);
+
+                ClaveColeccion nueva = new ClaveColeccion();
+                nueva.setCategoria(original.getCategoria());
+
+                hermanoDerecho.setClavePorIndice(j, nueva);
+
+                nodo.setClavePorIndice(i, null);
+                j++;
+            }
+
+            hermanoDerecho.setContadorClaves(j);
+
+            int k = 0;
+
+            for (int i = medio + 1; i <= total; i++) {
+                hermanoDerecho.setHijoPorIndice(k, nodo.getHijoPorIndice(i));
+                nodo.setHijoPorIndice(i, null);
+                k++;
+            }
+
+            nodo.setClavePorIndice(medio, null);
+            nodo.setContadorClaves(medio);
+
+            res.setClaveMediana(claveMediana);
         }
 
-        hermanoDerecho.setContadorClaves(j);
+        res.setHermanoDerecho(hermanoDerecho);
+        res.setSeDividio(true);
 
-        // limpiar nodo original
-        for (int i = medio; i < total; i++) {
-            nodo.setClavePorIndice(i, null);
-        }
-
-        nodo.setContadorClaves(medio);
-
-        ClaveColeccion claveSubir = new ClaveColeccion();
-        claveSubir.setCategoria(
-                hermanoDerecho.getClaveColeccionPorIndice(0).getCategoria()
-        );
-
-        res.setClaveMediana(claveSubir);
-
-    } else {
-
-        ClaveColeccion claveMediana = nodo.getClaveColeccionPorIndice(medio);
-
-        int j = 0;
-
-        // 🔥 copiar claves (internos no tienen lista, solo categoría)
-        for (int i = medio + 1; i < total; i++) {
-
-            ClaveColeccion original = nodo.getClaveColeccionPorIndice(i);
-
-            ClaveColeccion nueva = new ClaveColeccion();
-            nueva.setCategoria(original.getCategoria());
-
-            hermanoDerecho.setClavePorIndice(j, nueva);
-
-            nodo.setClavePorIndice(i, null);
-            j++;
-        }
-
-        hermanoDerecho.setContadorClaves(j);
-
-        int k = 0;
-
-        for (int i = medio + 1; i <= total; i++) {
-            hermanoDerecho.setHijoPorIndice(k, nodo.getHijoPorIndice(i));
-            nodo.setHijoPorIndice(i, null);
-            k++;
-        }
-
-        nodo.setClavePorIndice(medio, null);
-        nodo.setContadorClaves(medio);
-
-        res.setClaveMediana(claveMediana);
+        return res;
     }
-
-    res.setHermanoDerecho(hermanoDerecho);
-    res.setSeDividio(true);
-
-    return res;
-}
 
     private int localizarPosicionDeClave(NodoBMas nodo, String categoria) {
         int contador = 0;
@@ -243,7 +239,8 @@ private ResultadoDivision dividirNodo(NodoBMas nodo) throws ElementoNoEncontrado
         return new ListaEnlazadaOrdenada();
     }
 
-    public void eliminar(String codigoBarra, String categoria) throws EstructuraVaciaException, ElementoNoEncontradoException {
+    public void eliminar(String codigoBarra, String categoria)
+            throws EstructuraVaciaException, ElementoNoEncontradoException {
 
         if (this.raiz == null) {
             throw new EstructuraVaciaException("Arbol b+ vacio, nada para eliminar");
@@ -252,27 +249,33 @@ private ResultadoDivision dividirNodo(NodoBMas nodo) throws ElementoNoEncontrado
         if (this.raiz.isEsHoja()) {
             int indice = localizarPosicionDeClave(raiz, categoria);
 
-            if (indice < this.raiz.getContadorClaves() && this.raiz.getClavePorIndice(indice).equals(categoria)) {
-                this.raiz.eliminarProductoDeColeccion(indice, codigoBarra);
+            if (indice >= this.raiz.getContadorClaves()
+                    || !this.raiz.getClavePorIndice(indice).equals(categoria)) {
+                throw new ElementoNoEncontradoException(
+                        "No existe producto con categoria " + categoria);
             }
 
-            ListaEnlazadaOrdenada coleccion = this.raiz.getClaveColeccionPorIndice(indice).getColeccion();
+            this.raiz.eliminarProductoDeColeccion(indice, codigoBarra);
 
-            if (coleccion != null) {
-                if (coleccion.estaVacia()) {
-                    this.raiz.eliminarClaveConSuColeccion(indice);
-                }
+            ListaEnlazadaOrdenada coleccion = this.raiz
+                    .getClaveColeccionPorIndice(indice)
+                    .getColeccion();
+
+            if (coleccion != null && coleccion.estaVacia()) {
+                this.raiz.eliminarClaveConSuColeccion(indice);
             }
 
             if (this.raiz.estaVacio()) {
                 this.raiz = null;
             }
-        } else {
 
+        } else {
+            eliminarRecursivo(this.raiz, codigoBarra, categoria);
         }
     }
 
-    private void eliminarRecursivo(NodoBMas nodo, String codigoBarra, String categoria) throws ElementoNoEncontradoException {
+    private void eliminarRecursivo(NodoBMas nodo, String codigoBarra, String categoria)
+            throws ElementoNoEncontradoException {
 
         int indiceHijo = localizarPosicionDeClave(nodo, categoria);
         NodoBMas hijo = localizarHijo(nodo, categoria);
@@ -280,48 +283,60 @@ private ResultadoDivision dividirNodo(NodoBMas nodo) throws ElementoNoEncontrado
         if (hijo.isEsHoja()) {
             int indiceClave = localizarPosicionDeClave(hijo, categoria);
 
-            if (indiceClave < hijo.getContadorClaves() && hijo.getClavePorIndice(indiceClave).equals(categoria)) {
-                hijo.eliminarProductoDeColeccion(indiceClave, codigoBarra);
-
-                ListaEnlazadaOrdenada coleccion = this.raiz.getClaveColeccionPorIndice(indiceClave).getColeccion();
-
-                if (coleccion != null) {
-                    if (coleccion.estaVacia()) {
-                        this.raiz.eliminarClaveConSuColeccion(indiceClave);
-                    }
-                }
-
+            if (indiceClave >= hijo.getContadorClaves()
+                    || !hijo.getClavePorIndice(indiceClave).equals(categoria)) {
+                throw new ElementoNoEncontradoException(
+                        "No existe producto con categoria " + categoria);
             }
+
+            hijo.eliminarProductoDeColeccion(indiceClave, codigoBarra);
+
+            ListaEnlazadaOrdenada coleccion = hijo
+                    .getClaveColeccionPorIndice(indiceClave)
+                    .getColeccion();
+
+            if (coleccion != null && coleccion.estaVacia()) {
+                hijo.eliminarClaveConSuColeccion(indiceClave);
+            }
+
         } else {
             eliminarRecursivo(hijo, codigoBarra, categoria);
         }
 
-        //verificaciones 
-        if (hijo != null && hijo.debajoDelLimiteDeClaves()) {
+        if (hijo.debajoDelLimiteDeClaves()) {
 
-            if (indiceHijo < nodo.getContadorClaves() && nodo.getHijoPorIndice(indiceHijo + 1).cuentaConClavesDisponibles()) {
+            if (indiceHijo < nodo.getContadorClaves()
+                    && nodo.getHijoPorIndice(indiceHijo + 1) != null
+                    && nodo.getHijoPorIndice(indiceHijo + 1).cuentaConClavesDisponibles()) {
+
                 NodoBMas hermanoDerecho = nodo.getHijoPorIndice(indiceHijo + 1);
                 reestructurador.prestarDelDerecho(nodo, hijo, hermanoDerecho, indiceHijo);
-            } else if (indiceHijo > 0 && nodo.getHijoPorIndice(indiceHijo - 1).cuentaConClavesDisponibles()) {
+
+            } else if (indiceHijo > 0
+                    && nodo.getHijoPorIndice(indiceHijo - 1) != null
+                    && nodo.getHijoPorIndice(indiceHijo - 1).cuentaConClavesDisponibles()) {
+
                 NodoBMas hermanoIzquierdo = nodo.getHijoPorIndice(indiceHijo - 1);
-                reestructurador.prestarDelIzquierdo(nodo, hijo, hermanoIzquierdo, indiceHijo);
+                reestructurador.prestarDelIzquierdo(nodo, hijo, hermanoIzquierdo, indiceHijo - 1);
+
             } else {
-                NodoBMas hermanoDerecho = nodo.getHijoPorIndice(indiceHijo + 1);
-                NodoBMas hermanoIzquierdo = nodo.getHijoPorIndice(indiceHijo - 1);
-                if (indiceHijo < nodo.getContadorClaves() && hermanoDerecho != null) {
-                    reestructurador.fusionar(nodo, hijo, hermanoDerecho, indiceHijo);
-                } else if (hermanoIzquierdo != null) {
-                    reestructurador.fusionar(nodo, hijo, hermanoIzquierdo, indiceHijo);
+                if (indiceHijo < nodo.getContadorClaves()) {
+                    NodoBMas hermanoDerecho = nodo.getHijoPorIndice(indiceHijo + 1);
+                    if (hermanoDerecho != null) {
+                        reestructurador.fusionar(nodo, hijo, hermanoDerecho, indiceHijo);
+                    }
+                } else if (indiceHijo > 0) {
+                    NodoBMas hermanoIzquierdo = nodo.getHijoPorIndice(indiceHijo - 1);
+                    if (hermanoIzquierdo != null) {
+                        reestructurador.fusionar(nodo, hermanoIzquierdo, hijo, indiceHijo - 1);
+                    }
                 }
             }
         }
 
         if (nodo == this.raiz && !this.raiz.isEsHoja() && this.raiz.getContadorClaves() == 0) {
-            NodoBMas temp = this.raiz;
             this.raiz = this.raiz.getHijoPorIndice(0);
-            temp.setHijoPorIndice(0, null);
         }
-
     }
 
     public void generarDOT(String nombreArchivo) throws ElementoNoEncontradoException {
@@ -375,7 +390,7 @@ private ResultadoDivision dividirNodo(NodoBMas nodo) throws ElementoNoEncontrado
                         label.append("\\n");
                     }
                 }
-            } 
+            }
 
             label.append(" } | ");
         }

@@ -39,10 +39,10 @@ public class ArbolAVL {
         if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) < 0) {
             NodoAVL izquierdo = insertarRecursivo(nodo.getIzquierdo(), producto);
             nodo.setIzquierdo(izquierdo);
-        } else if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) >= 0 ) {
+        } else if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) >= 0) {
             NodoAVL derecho = insertarRecursivo(nodo.getDerecho(), producto);
             nodo.setDerecho(derecho);
-        } 
+        }
 
         return verificarEquilibrio(nodo);
     }
@@ -204,8 +204,8 @@ public class ArbolAVL {
      * @param nombre
      * @throws ElementoNoEncontradoException
      */
-    public void eliminar(String nombre) throws ElementoNoEncontradoException {
-        this.raiz = eliminarRecursivo(raiz, nombre);
+    public void eliminar(String nombre, String codigoBarra) throws ElementoNoEncontradoException {
+        this.raiz = eliminarRecursivo(raiz, nombre, codigoBarra);
     }
 
     /**
@@ -215,39 +215,56 @@ public class ArbolAVL {
      * @return
      * @throws ElementoNoEncontradoException
      */
-    public NodoAVL eliminarRecursivo(NodoAVL nodo, String nombre) throws ElementoNoEncontradoException {
+    public NodoAVL eliminarRecursivo(NodoAVL nodo, String nombre, String codigoBarra)
+            throws ElementoNoEncontradoException {
+
         if (nodo == null) {
-            throw new ElementoNoEncontradoException("No existe el producto con nombre " + nombre + " , se cancela eliminacion");
+            throw new ElementoNoEncontradoException(
+                    "No existe el producto con nombre " + nombre
+                    + " y codigo de barras " + codigoBarra);
         }
 
-        if (nombre.compareTo(nodo.getElemento().getNombre()) < 0) {
-            NodoAVL izquierdo = eliminarRecursivo(nodo.getIzquierdo(), nombre);
-            nodo.setIzquierdo(izquierdo);
-        } else if (nombre.compareTo(nodo.getElemento().getNombre()) > 0) {
-            NodoAVL derecho = eliminarRecursivo(nodo.getDerecho(), nombre);
-            nodo.setDerecho(derecho);
+        int cmp = nombre.compareTo(nodo.getElemento().getNombre());
+
+        if (cmp < 0) {
+            nodo.setIzquierdo(eliminarRecursivo(nodo.getIzquierdo(), nombre, codigoBarra));
+
+        } else if (cmp > 0) {
+            nodo.setDerecho(eliminarRecursivo(nodo.getDerecho(), nombre, codigoBarra));
+
         } else {
-            if (nodo.getIzquierdo() == null || nodo.getDerecho() == null) {
-                NodoAVL ref = nodo.getIzquierdo() != null ? nodo.getIzquierdo() : nodo.getDerecho();
+            if (!nodo.getElemento().getCodigoBarra().equals(codigoBarra)) {
+                nodo.setDerecho(eliminarRecursivo(nodo.getDerecho(), nombre, codigoBarra));
 
-                if (ref == null) {
-                    nodo = null;
-                } else {
-                    nodo = ref;
-                }
             } else {
-                NodoAVL ref = obtenerNodoMenor(nodo);
+                if (nodo.getIzquierdo() == null || nodo.getDerecho() == null) {
+                    NodoAVL ref;
 
-                Producto producto = ref.getElemento();
-                nodo.setElemento(producto);
+                    if (nodo.getIzquierdo() != null) {
+                        ref = nodo.getIzquierdo();
+                    } else {
+                        ref = nodo.getDerecho();
+                    }
 
-                NodoAVL derecho = eliminarRecursivo(nodo.getDerecho(), ref.getElemento().getNombre());
-                nodo.setDerecho(derecho);
+                    if (ref == null) {
+                        nodo = null;
+                    } else {
+                        nodo = ref;
+                    }
+                } else {
+                    NodoAVL ref = obtenerNodoMenor(nodo.getDerecho());
+                    nodo.setElemento(ref.getElemento());
+                    nodo.setDerecho(eliminarRecursivo(
+                            nodo.getDerecho(),
+                            ref.getElemento().getNombre(),
+                            ref.getElemento().getCodigoBarra()
+                    ));
+                }
             }
         }
 
         if (nodo == null) {
-            return nodo;
+            return null;
         }
         return verificarEquilibrio(nodo);
     }

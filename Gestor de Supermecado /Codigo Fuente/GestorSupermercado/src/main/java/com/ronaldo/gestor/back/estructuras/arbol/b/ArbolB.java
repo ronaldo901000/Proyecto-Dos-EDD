@@ -30,7 +30,7 @@ public class ArbolB {
      */
     public ListaEnlazada buscar(String fInicial, String fFinal) {
         ListaEnlazada lista = new ListaEnlazada();
-
+        buscarRecursivo(raiz, fInicial, fFinal, lista);
         return lista;
     }
 
