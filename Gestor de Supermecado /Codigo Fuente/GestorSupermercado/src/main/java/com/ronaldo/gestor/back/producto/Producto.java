@@ -46,18 +46,18 @@ public class Producto {
         }
 
         if (codigoBarra.length() != CARACTERES_CODIGO_BARRA) {
-            throw new DatoInvalidoException("El codigo de barras debe tener EXACTAMENTE 10 caracteres"+ "Codigo Barra: "+ codigoBarra);
+            throw new DatoInvalidoException("El codigo de barras debe tener EXACTAMENTE 10 caracteres");
         }
         
         
         if(precio < 0){
             datoInvalido = true;
-            throw  new DatoInvalidoException("El precio no debe ser menor a Q.00"+ "Codigo Barra: "+ codigoBarra);
+            throw  new DatoInvalidoException("El precio no debe ser menor a Q.00");
         }
         
         if(existencias < 0){
             datoInvalido = true;
-            throw  new DatoInvalidoException("Las existencias no debe ser menor a 0"+ "Codigo Barra: "+ codigoBarra);
+            throw  new DatoInvalidoException("Las existencias no debe ser menor a 0");
         }
         
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -67,7 +67,7 @@ public class Producto {
             
         } catch (DateTimeParseException e) {
             datoInvalido = true;
-            throw new DatoInvalidoException("Error en el formato de fecha"+ "Codigo Barra: "+ codigoBarra);
+            throw new DatoInvalidoException("Error en el formato de fecha "+fechaVencimiento);
         }
         
     }

@@ -1,7 +1,7 @@
 package com.ronaldo.gestor.front.frame;
 
 import com.ronaldo.gestor.back.controlador.Controlador;
-import com.ronaldo.gestor.front.paneles.PanelMenuPrincipal;
+import com.ronaldo.gestor.front.paneles.PanelPrincipal;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
@@ -24,7 +24,7 @@ public class FrameGeneral extends javax.swing.JFrame {
     public FrameGeneral() {
         initComponents();
         controlador = new Controlador();
-        ponerPanelEnFramePrincipal(new PanelMenuPrincipal(this.controlador));
+        ponerPanelEnFramePrincipal(new PanelPrincipal(this.controlador));
         panelGeneral.setLayout(new GridLayout());
     }
 

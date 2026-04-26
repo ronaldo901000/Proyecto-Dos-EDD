@@ -4,12 +4,13 @@ import com.ronaldo.gestor.back.estructuras.arbol.avl.ArbolAVL;
 import com.ronaldo.gestor.back.estructuras.arbol.b.ArbolB;
 import com.ronaldo.gestor.back.estructuras.arbol.bmas.ArbolBMas;
 import com.ronaldo.gestor.back.estructuras.grafo.Arista;
-import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
 import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
+import com.ronaldo.gestor.back.estructuras.lista.ordenada.ListaEnlazadaOrdenada;
+import com.ronaldo.gestor.back.estructuras.tablaHash.TablaHash;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
-import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.producto.Producto;
+import com.ronaldo.gestor.back.verificacion.VerificadorDeProductos;
 
 /**
  *
@@ -28,7 +29,12 @@ public class Sucursal {
     private ArbolAVL avl;
     private ArbolB b;
     private ArbolBMas bMas;
+    private TablaHash tablaHash;
     private int totalNuevosInsertados;
+    private ListaEnlazada listaDesordenada;
+    private ListaEnlazadaOrdenada listaOrdenada;
+    private VerificadorDeProductos verificadorProductos;
+    private boolean hayDuplicados;
 
     public Sucursal(String id, String nombre, String ubicacion, int tiempoIngreso, int tiempoTraspaso, int intervaloDespacho) {
         this.id = id;
@@ -40,22 +46,63 @@ public class Sucursal {
         this.avl = new ArbolAVL();
         this.b = new ArbolB();
         this.bMas = new ArbolBMas();
+        this.tablaHash = new TablaHash();
+        this.listaDesordenada = new ListaEnlazada();
+        this.listaOrdenada = new ListaEnlazadaOrdenada();
+        this.verificadorProductos = new VerificadorDeProductos();
     }
 
-    public void insertarProducto(Producto producto) {
-        //insertar en todas las estructuras
+    public void insertarProducto(Producto producto) throws ElementoExistenteException, ElementoNoEncontradoException {
+        //verificaciones
+        verificadorProductos.verificar(producto, this);
+
+        //insertado en todas las estructuras
+        tablaHash.insertar(producto, false);
+
+        if (tablaHash.isHayDuplicados()) {
+            return;
+        }
+
+        avl.insertar(producto);
+        b.insertar(producto);
+        bMas.insertar(producto);
+        listaDesordenada.insertar(producto);
+        listaOrdenada.insertar(producto);
+
     }
 
+    /**
+     *
+     * @param nuevos
+     * @throws ElementoExistenteException
+     * @throws ElementoNoEncontradoException
+     */
     public void insertarListaProductos(ListaEnlazada nuevos) throws ElementoExistenteException, ElementoNoEncontradoException {
+        hayDuplicados = false;
         totalNuevosInsertados = 0;
-        if (nuevos == null) return;
-        
+        if (nuevos == null) {
+            throw new ElementoNoEncontradoException("La lista de productos nuevos es nula.");
+        }
+
         for (int i = 0; i < nuevos.getTamaño(); i++) {
+
             Producto p = nuevos.obtener(i);
+
+            tablaHash.insertar(p, true);
+
+            if (tablaHash.isHayDuplicados()) {
+                hayDuplicados = true;
+                continue;
+            }
+
+            listaDesordenada.insertar(p);
+            listaOrdenada.insertar(p);
             avl.insertar(p);
             b.insertar(p);
             bMas.insertar(p);
+
             totalNuevosInsertados++;
+
         }
     }
 
@@ -151,6 +198,20 @@ public class Sucursal {
         return totalNuevosInsertados;
     }
 
-    
-    
+    public TablaHash getTablaHash() {
+        return tablaHash;
+    }
+
+    public ListaEnlazada getListaDesordenada() {
+        return listaDesordenada;
+    }
+
+    public ListaEnlazadaOrdenada getListaOrdenada() {
+        return listaOrdenada;
+    }
+
+    public boolean isHayDuplicados() {
+        return hayDuplicados;
+    }
+
 }

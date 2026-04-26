@@ -19,9 +19,8 @@ public class ArbolAVL {
     /**
      *
      * @param producto
-     * @throws ElementoExistenteException
      */
-    public void insertar(Producto producto) throws ElementoExistenteException {
+    public void insertar(Producto producto) {
         this.raiz = insertarRecursivo(raiz, producto);
     }
 
@@ -32,7 +31,7 @@ public class ArbolAVL {
      * @return
      * @throws ElementoExistenteException
      */
-    private NodoAVL insertarRecursivo(NodoAVL nodo, Producto producto) throws ElementoExistenteException {
+    private NodoAVL insertarRecursivo(NodoAVL nodo, Producto producto) {
         if (nodo == null) {
             return new NodoAVL(producto);
         }
@@ -40,12 +39,10 @@ public class ArbolAVL {
         if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) < 0) {
             NodoAVL izquierdo = insertarRecursivo(nodo.getIzquierdo(), producto);
             nodo.setIzquierdo(izquierdo);
-        } else if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) > 0) {
+        } else if (producto.getNombre().compareTo(nodo.getElemento().getNombre()) >= 0 ) {
             NodoAVL derecho = insertarRecursivo(nodo.getDerecho(), producto);
             nodo.setDerecho(derecho);
-        } else {
-            throw new ElementoExistenteException("El producto con nombre " + producto.getNombre() + " ya ha sido registrado antes.");
-        }
+        } 
 
         return verificarEquilibrio(nodo);
     }

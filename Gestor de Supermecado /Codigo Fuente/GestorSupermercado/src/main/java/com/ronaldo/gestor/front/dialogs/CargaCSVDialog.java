@@ -10,7 +10,6 @@ import com.ronaldo.gestor.back.lectura.LectorConexiones;
 import com.ronaldo.gestor.back.lectura.LectorProductos;
 import com.ronaldo.gestor.back.lectura.LectorSucursales;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
-import com.ronaldo.gestor.back.verificacion.VerificadorExistencias;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -294,13 +293,10 @@ public class CargaCSVDialog extends javax.swing.JDialog {
                     Sucursal sucursal = dialog.getSeleccionado();
 
                     ListaEnlazada nuevosProductos = lector.leerCSVProductos(ruta);
-                    VerificadorExistencias verificador = new VerificadorExistencias();
 
-                    ListaEnlazada listaFinal = verificador.filtrar(sucursal, nuevosProductos);
+                    sucursal.insertarListaProductos(nuevosProductos);
 
-                    sucursal.insertarListaProductos(listaFinal);
-
-                    if (lector.isHayErrores() || verificador.isHayDuplicados()) {
+                    if (lector.isHayErrores() || sucursal.isHayDuplicados()) {
 
                         JOptionPane.showMessageDialog(
                                 this,
