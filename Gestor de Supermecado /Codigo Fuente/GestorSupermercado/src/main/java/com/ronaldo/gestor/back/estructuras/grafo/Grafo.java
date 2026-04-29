@@ -45,6 +45,14 @@ public class Grafo {
         this.totalSucursales++;
     }
 
+    /**
+     *
+     * @param idOrigen
+     * @param idDestino
+     * @param tiempo
+     * @param costo
+     * @throws ElementoNoEncontradoException
+     */
     public void conectar(String idOrigen, String idDestino, int tiempo, double costo) throws ElementoNoEncontradoException {
 
         Sucursal temp = buscador.buscarSucursal(idOrigen, lista);
@@ -55,40 +63,23 @@ public class Grafo {
         temp.setCabezaLista(nuevaConexion);
     }
 
-    public void mostrarGrafo() {
-        Sucursal sucursal = cabeza;
-        System.out.println("CONEXIONES:");
-        int i = 1;
-        while (sucursal != null) {
-
-            System.out.println(i + ". " + sucursal.getNombre() + " " + sucursal.getId());
-
-            Arista arista = sucursal.getCabezaLista();
-
-            while (arista != null) {
-                System.out.println("    -> " + arista.getIdDestino());
-                arista = arista.getSiguiente();
-            }
-            sucursal = sucursal.getSiguiente();
-            i++;
-        }
-    }
-
-    public void ejecutarDijkstra(String idOrigen, String idDestino, boolean esTiempo) throws ListaException {
+    public ListaEnlazadaGenerica<Sucursal> ejecutarDijkstra(String idOrigen, String idDestino, boolean esTiempo) throws ListaException, ElementoNoEncontradoException {
         int n = this.totalSucursales;
         double[] distancias = new double[n];
         boolean[] visitados = new boolean[n];
-        Sucursal[] padres = new Sucursal[n];
+        int[] anteriores = new int[n];
 
         for (int i = 0; i < n; i++) {
             distancias[i] = Double.MAX_VALUE;
             visitados[i] = false;
+            anteriores[i] = -1;
         }
 
         int indiceOrigen = obtenerIndiceSucursal(idOrigen);
+        int indiceDestino = obtenerIndiceSucursal(idDestino);
 
         if (indiceOrigen == -1) {
-            return;
+            throw new ElementoNoEncontradoException("Sucursal no encontrada");
         }
 
         //distancia hacia el mismo = 0
@@ -96,7 +87,73 @@ public class Grafo {
 
         for (int i = 0; i < n; i++) {
 
+            int actual = encontrarIndiceMenorCosto(distancias, visitados);
+
+            if (actual == -1) {
+                break;
+            }
+
+            visitados[actual] = true;
+
+            Sucursal sActual = lista.obtenerValor(actual);
+
+            Arista arista = sActual.getCabezaLista();
+
+            while (arista != null) {
+
+                int indiceVecino = obtenerIndiceSucursal(arista.getIdDestino());
+
+                if (indiceVecino == -1) {
+                    arista = arista.getSiguiente();
+                    continue;
+                }
+
+                if (visitados[indiceVecino]) {
+                    arista = arista.getSiguiente();
+                    continue;
+                }
+
+                double peso = esTiempo ? arista.getTiempo() : arista.getCosto();
+                double nuevaDistancia = distancias[actual] + peso;
+
+                if (nuevaDistancia < distancias[indiceVecino]) {
+                    distancias[indiceVecino] = nuevaDistancia;
+                    anteriores[indiceVecino] = actual; // guardar de dónde vine
+                }
+
+                arista = arista.getSiguiente();
+
+            }
+
         }
+
+        return reconstruirRuta(anteriores, indiceOrigen, indiceDestino);
+    }
+
+    private ListaEnlazadaGenerica<Sucursal> reconstruirRuta(int[] anteriores, int indiceOrigen, int indiceDestino) throws ListaException {
+
+        ListaEnlazadaGenerica<Sucursal> ruta = new ListaEnlazadaGenerica<>();
+
+        // si no hay camino
+        if (anteriores[indiceDestino] == -1 && indiceDestino != indiceOrigen) {
+            return ruta; // ruta vacía — sin camino posible
+        }
+
+        // recorrer desde destino hacia origen usando el arreglo anteriores
+        ListaEnlazadaGenerica<Sucursal> rutaInvertida = new ListaEnlazadaGenerica<>();
+        int actual = indiceDestino;
+
+        while (actual != -1) {
+            rutaInvertida.agregarElemento(lista.obtenerValor(actual));
+            actual = anteriores[actual];
+        }
+
+        // invertir para que quede origen → destino
+        for (int i = rutaInvertida.getTamaño() - 1; i >= 0; i--) {
+            ruta.agregarElemento(rutaInvertida.obtenerValor(i));
+        }
+
+        return ruta;
     }
 
     private int obtenerIndiceSucursal(String idSucursal) throws ListaException {
@@ -109,12 +166,12 @@ public class Grafo {
         return -1;
     }
 
-    private int encontrarIndiceMenorCosto(double[] costos, boolean[] procesados) {
+    private int encontrarIndiceMenorCosto(double[] costos, boolean[] visitados) {
         double valorMinimo = Double.MAX_VALUE;
         int indiceMinimo = -1;
 
         for (int i = 0; i < costos.length; i++) {
-            if (!procesados[i] && costos[i] <= valorMinimo) {
+            if (!visitados[i] && costos[i] <= valorMinimo) {
                 valorMinimo = costos[i];
                 indiceMinimo = i;
             }

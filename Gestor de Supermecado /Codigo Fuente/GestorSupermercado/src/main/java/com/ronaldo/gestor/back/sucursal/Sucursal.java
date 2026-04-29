@@ -8,6 +8,7 @@ import com.ronaldo.gestor.back.estructuras.grafo.Arista;
 import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
 import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.estructuras.lista.ordenada.ListaEnlazadaOrdenada;
+import com.ronaldo.gestor.back.estructuras.pilasYcolas.Cola;
 import com.ronaldo.gestor.back.estructuras.tablaHash.TablaHash;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
@@ -38,6 +39,9 @@ public class Sucursal {
     private ListaEnlazadaOrdenada listaOrdenada;
     private VerificadorDeProductos verificadorProductos;
     private boolean hayDuplicados;
+    private Cola colaIngreso;
+    private Cola colaTraspaso;
+    private Cola colaSalida;
 
     public Sucursal(String id, String nombre, String ubicacion, int tiempoIngreso, int tiempoTraspaso, int intervaloDespacho) {
         this.id = id;
@@ -53,6 +57,9 @@ public class Sucursal {
         this.listaDesordenada = new ListaEnlazada();
         this.listaOrdenada = new ListaEnlazadaOrdenada();
         this.verificadorProductos = new VerificadorDeProductos();
+        this.colaIngreso = new Cola();
+        this.colaTraspaso = new Cola();
+        this.colaSalida = new Cola();
     }
 
     public void insertarProducto(Producto producto) throws ElementoExistenteException, ElementoNoEncontradoException {
@@ -80,32 +87,28 @@ public class Sucursal {
      * @throws ElementoExistenteException
      * @throws ElementoNoEncontradoException
      */
-    public void insertarListaProductos(ListaEnlazada nuevos) throws ElementoExistenteException, ElementoNoEncontradoException {
+    public void insertarListaProductos(ListaEnlazada nuevos)
+            throws ElementoExistenteException, ElementoNoEncontradoException {
         hayDuplicados = false;
         totalNuevosInsertados = 0;
         if (nuevos == null) {
             throw new ElementoNoEncontradoException("La lista de productos nuevos es nula.");
         }
-
         for (int i = 0; i < nuevos.getTamaño(); i++) {
-
             Producto p = nuevos.obtener(i);
 
-            tablaHash.insertar(p, true);
-
-            if (tablaHash.isHayDuplicados()) {
+            if (this.tablaHash.buscar(p.getCodigoBarra()) != null) {
                 hayDuplicados = true;
-                continue;
+                continue; 
             }
 
+            tablaHash.insertar(p, false);
             listaDesordenada.insertar(p);
             listaOrdenada.insertar(p);
             avl.insertar(p);
             b.insertar(p);
             bMas.insertar(p);
-
             totalNuevosInsertados++;
-
         }
     }
 
@@ -252,6 +255,18 @@ public class Sucursal {
 
     public boolean isHayDuplicados() {
         return hayDuplicados;
+    }
+
+    public Cola getColaIngreso() {
+        return colaIngreso;
+    }
+
+    public Cola getColaTraspaso() {
+        return colaTraspaso;
+    }
+
+    public Cola getColaSalida() {
+        return colaSalida;
     }
 
 }

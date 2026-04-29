@@ -6,6 +6,7 @@ import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
 import com.ronaldo.gestor.front.dialogs.CargaCSVDialog;
+import com.ronaldo.gestor.front.dialogs.IniciarTransferenciaDialog;
 import com.ronaldo.gestor.front.dialogs.NuevaSucursalDialog;
 import java.awt.Dimension;
 import javax.swing.BoxLayout;
@@ -21,6 +22,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
     public PanelPrincipal(Controlador controlador) {
         initComponents();
         panelListaSucursales.setLayout(new BoxLayout(panelListaSucursales, BoxLayout.Y_AXIS));
+        panelTransferencias.setLayout(new BoxLayout(panelTransferencias, BoxLayout.Y_AXIS));
         this.controlador = controlador;
         cargarSucursales();
 
@@ -34,7 +36,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         btnNuevaSucursal = new javax.swing.JButton();
-        btnTranferencias1 = new javax.swing.JButton();
+        btnTransferencia = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         btnTranferencias2 = new javax.swing.JButton();
@@ -56,6 +58,9 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jPanel7 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         txtTotalProductos = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        scrollPaneSucursales1 = new javax.swing.JScrollPane();
+        panelTransferencias = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 204));
 
@@ -73,7 +78,8 @@ public class PanelPrincipal extends javax.swing.JPanel {
         btnNuevaSucursal.setText("Nueva Sucursal");
         btnNuevaSucursal.addActionListener(this::btnNuevaSucursalActionPerformed);
 
-        btnTranferencias1.setText("Tranferencia");
+        btnTransferencia.setText("Tranferencia");
+        btnTransferencia.addActionListener(this::btnTransferenciaActionPerformed);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -84,7 +90,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnNuevaSucursal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTranferencias1, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
+                    .addComponent(btnTransferencia, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -94,7 +100,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(btnNuevaSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnTranferencias1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnTransferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(64, Short.MAX_VALUE))
         );
 
@@ -217,7 +223,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
             .addGroup(panelSucursalesLayout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scrollPaneSucursales))
+                .addComponent(scrollPaneSucursales, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
@@ -321,13 +327,13 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,6 +345,18 @@ public class PanelPrincipal extends javax.swing.JPanel {
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        jLabel7.setFont(new java.awt.Font("Liberation Sans", 1, 21)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("TRANFERENCIAS");
+        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        scrollPaneSucursales1.setOpaque(false);
+
+        panelTransferencias.setOpaque(false);
+        panelTransferencias.setLayout(new java.awt.BorderLayout());
+        scrollPaneSucursales1.setViewportView(panelTransferencias);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -352,7 +370,9 @@ public class PanelPrincipal extends javax.swing.JPanel {
                         .addGap(96, 96, 96)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelSucursales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(panelSucursales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrollPaneSucursales1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(131, 131, 131))))
         );
         layout.setVerticalGroup(
@@ -363,8 +383,12 @@ public class PanelPrincipal extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(panelSucursales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(82, 82, 82))
+                .addComponent(panelSucursales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(scrollPaneSucursales1)
+                .addGap(19, 19, 19))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -394,6 +418,17 @@ public class PanelPrincipal extends javax.swing.JPanel {
         cargarSucursales();
     }//GEN-LAST:event_btnNuevaSucursalActionPerformed
 
+    private void btnTransferenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferenciaActionPerformed
+
+        IniciarTransferenciaDialog dialog = new IniciarTransferenciaDialog(
+                controlador.getGrafo().getLista(), 
+                controlador.getGrafo(), 
+                this
+        );
+        
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnTransferenciaActionPerformed
+
     public void cargarSucursales() {
         panelListaSucursales.removeAll();
 
@@ -417,19 +452,28 @@ public class PanelPrincipal extends javax.swing.JPanel {
 
     }
 
+    public void agregarTransferencia(ProgresoPanel panel){
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, panel.getPreferredSize().height));
+        
+        panelTransferencias.add(panel);
+        panelTransferencias.revalidate();
+        panelTransferencias.repaint();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargarCSV;
     private javax.swing.JButton btnNuevaSucursal;
-    private javax.swing.JButton btnTranferencias1;
     private javax.swing.JButton btnTranferencias2;
     private javax.swing.JButton btnTranferencias3;
     private javax.swing.JButton btnTranferencias4;
+    private javax.swing.JButton btnTransferencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -440,7 +484,9 @@ public class PanelPrincipal extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel panelListaSucursales;
     private javax.swing.JPanel panelSucursales;
+    private javax.swing.JPanel panelTransferencias;
     private javax.swing.JScrollPane scrollPaneSucursales;
+    private javax.swing.JScrollPane scrollPaneSucursales1;
     private javax.swing.JLabel txtTotalProductos;
     private javax.swing.JLabel txtTotalSucursales;
     private javax.swing.JLabel txtTotalTranferencias;

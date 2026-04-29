@@ -24,10 +24,12 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
     private Controlador controlador;
     private Sucursal sucursal;
+    private PanelPrincipal principal;
 
-    public PanelMenuSucursal(Sucursal sucursal, Controlador controlador) {
+    public PanelMenuSucursal(Sucursal sucursal, Controlador controlador, PanelPrincipal principal) {
         initComponents();
         this.controlador = controlador;
+        this.principal = principal;
         this.sucursal = sucursal;
         txtNombre.setText("Sucursal: " + sucursal.getNombre());
         txtUbicacion.setText("Ubicacion: " + sucursal.getUbicacion());
@@ -44,7 +46,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         txtNombre = new javax.swing.JLabel();
         txtUbicacion = new javax.swing.JLabel();
         txtID = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         txtTotalProductos = new javax.swing.JLabel();
         txtTIngreso = new javax.swing.JLabel();
         txtTPreparacion = new javax.swing.JLabel();
@@ -84,10 +86,10 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
         txtID.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
 
-        jButton2.setBackground(new java.awt.Color(51, 102, 255));
-        jButton2.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
-        jButton2.setText("Regresar");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnRegresar.setBackground(new java.awt.Color(51, 102, 255));
+        btnRegresar.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(this::btnRegresarActionPerformed);
 
         txtTotalProductos.setFont(new java.awt.Font("Liberation Sans", 1, 21)); // NOI18N
 
@@ -114,7 +116,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelEncabezadoLayout.setVerticalGroup(
@@ -135,7 +137,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                             .addComponent(txtIntervalo, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)))
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -333,10 +335,11 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnListar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnListar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -406,12 +409,11 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
             .addGroup(panelContenidoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelContenidoLayout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelContenidoLayout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panelContenidoLayout.setVerticalGroup(
             panelContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,9 +441,9 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        FrameGeneral.ponerPanelEnFramePrincipal(new PanelPrincipal(controlador));
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        FrameGeneral.ponerPanelEnFramePrincipal(principal);
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
         NuevoProductoDialog dialog = new NuevoProductoDialog(sucursal);
@@ -645,9 +647,9 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnInsertar;
     private javax.swing.JButton btnListar;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cmbTipoBusqueda;
     private javax.swing.JTextField fieldBuscar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
