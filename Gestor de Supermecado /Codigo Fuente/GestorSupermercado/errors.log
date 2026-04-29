@@ -7168,3 +7168,33 @@ Linea 991: valor no numerico For input string: "Electronics"
 Linea 992: valor no numerico For input string: "Home Appliances"
 Linea 993: valor no numerico For input string: "Electronics"
 Linea 994: valor no numerico For input string: "Baby"
+Linea 2: Ya existe una conexión de SUC-001 hacia SUC-002
+Linea 3: Ya existe una conexión de SUC-002 hacia SUC-003
+Linea 4: Ya existe una conexión de SUC-001 hacia SUC-003
+Linea 5: Ya existe una conexión de SUC-003 hacia SUC-004
+Linea 6: Ya existe una conexión de SUC-004 hacia SUC-005
+Linea 7: Ya existe una conexión de SUC-002 hacia SUC-005
+Linea 8: Ya existe una conexión de SUC-005 hacia SUC-003
+Linea 9: Ya existe una conexión de SUC-001 hacia SUC-004
+Linea 10: Ya existe una conexión de SUC-003 hacia SUC-006
+Linea 11: Ya existe una conexión de SUC-006 hacia SUC-007
+Linea 12: Ya existe una conexión de SUC-007 hacia SUC-008
+Linea 13: Ya existe una conexión de SUC-004 hacia SUC-007
+Linea 14: Ya existe una conexión de SUC-008 hacia SUC-009
+Linea 15: Ya existe una conexión de SUC-009 hacia SUC-010
+Linea 16: Ya existe una conexión de SUC-010 hacia SUC-011
+Linea 17: Ya existe una conexión de SUC-006 hacia SUC-011
+Linea 18: Ya existe una conexión de SUC-011 hacia SUC-012
+Linea 19: Ya existe una conexión de SUC-012 hacia SUC-013
+Linea 20: Ya existe una conexión de SUC-005 hacia SUC-012
+Linea 21: Ya existe una conexión de SUC-013 hacia SUC-014
+Linea 22: Ya existe una conexión de SUC-014 hacia SUC-015
+Linea 23: Ya existe una conexión de SUC-015 hacia SUC-016
+Linea 24: Ya existe una conexión de SUC-016 hacia SUC-017
+Linea 25: Ya existe una conexión de SUC-017 hacia SUC-018
+Linea 26: Ya existe una conexión de SUC-018 hacia SUC-019
+Linea 27: Ya existe una conexión de SUC-019 hacia SUC-020
+Linea 28: Ya existe una conexión de SUC-020 hacia SUC-001
+Linea 29: Ya existe una conexión de SUC-007 hacia SUC-019
+Linea 30: Ya existe una conexión de SUC-009 hacia SUC-019
+Linea 31: Ya existe una conexión de SUC-010 hacia SUC-020
