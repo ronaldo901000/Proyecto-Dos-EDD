@@ -111,10 +111,28 @@ public class ArbolB {
             resultado = insertarRecursivo(hijo, clave);
 
             if (resultado.isSeDividio()) {
+                // Encontrar posición correcta para la clave mediana
+                int pos = 0;
+                while (pos < nodo.getContador()
+                        && resultado.getClaveMediana().getFecha()
+                                .compareTo(nodo.getClavePorIndice(pos).getFecha()) > 0) {
+                    pos++;
+                }
 
-                nodo.insetarNuevaClave(resultado.getClaveMediana());
-                nodo.insertarNuevoHijo(resultado.getHermanoDerecho());
-                aux.ordenarNodo(nodo.getTodasLasClaves(), nodo.getTodosLosHijos(), nodo.getContador());
+                // Desplazar claves a la derecha
+                for (int i = nodo.getContador(); i > pos; i--) {
+                    nodo.setClavePorIndice(i, nodo.getClavePorIndice(i - 1));
+                }
+
+                // Desplazar hijos a la derecha
+                for (int i = nodo.getContador() + 1; i > pos + 1; i--) {
+                    nodo.setHijoPorIndice(i, nodo.getHijoPorIndice(i - 1));
+                }
+
+                // Insertar clave y hermano derecho en posición correcta
+                nodo.setClavePorIndice(pos, resultado.getClaveMediana());
+                nodo.setHijoPorIndice(pos + 1, resultado.getHermanoDerecho());
+                nodo.setContador(nodo.getContador() + 1);
 
                 if (nodo.nodoSobrePasado()) {
                     return dividirNodo(nodo);
@@ -154,14 +172,14 @@ public class ArbolB {
 
         ResultadoDivision resultado = new ResultadoDivision();
 
-        int total = nodo.getContador(); 
+        int total = nodo.getContador();
         int indiceMedio = D;
         Clave claveMediana = nodo.getClavePorIndice(indiceMedio);
 
         NodoB hermanoDerecho = new NodoB(nodo.isHoja());
 
         int j = 0;
-        for (int i = indiceMedio + 1; i < total; i++) { 
+        for (int i = indiceMedio + 1; i < total; i++) {
             hermanoDerecho.insetarNuevaClave(nodo.getClavePorIndice(i));
             nodo.setClavePorIndice(i, null);
             j++;
@@ -170,7 +188,7 @@ public class ArbolB {
 
         if (nodo.isInterno()) {
             int k = 0;
-            for (int i = indiceMedio + 1; i <= total; i++) { 
+            for (int i = indiceMedio + 1; i <= total; i++) {
                 hermanoDerecho.setHijoPorIndice(k, nodo.getHijoPorIndice(i));
                 nodo.setHijoPorIndice(i, null);
                 k++;
@@ -196,7 +214,6 @@ public class ArbolB {
         eliminarRecursivo(this.raiz, clave);
 
         if (this.raiz.getContador() == 0) {
-            NodoB tmp = this.raiz;
             if (this.raiz.isHoja()) {
                 this.raiz = null;
             } else {
@@ -224,6 +241,7 @@ public class ArbolB {
     }
 
     private void eliminarRecursivo(NodoB nodo, Clave clave) throws ElementoNoEncontradoException {
+
         int indice = encontrarClave(nodo, clave);
 
         if (indice < nodo.getContador()
@@ -240,17 +258,46 @@ public class ArbolB {
                         + clave.getProducto().getNombre() + " no existe en el arbol");
             }
 
-            boolean esUltimoHijo = (indice == nodo.getContador());
+            int indiceNavegar = 0;
+            while (indiceNavegar < nodo.getContador()) {
+                int cmpFecha = clave.getFecha().compareTo(
+                        nodo.getClavePorIndice(indiceNavegar).getFecha());
+                if (cmpFecha < 0) {
+                    break;
+                }
+                if (cmpFecha == 0) {
 
-            if (nodo.getHijoPorIndice(indice).getContador() < D) {
-                rellenarNodo(nodo, indice);
+                    int cmpCod = clave.getProducto().getCodigoBarra().compareTo(
+                            nodo.getClavePorIndice(indiceNavegar).getProducto().getCodigoBarra());
+                    if (cmpCod < 0) {
+                        break;
+                    }
+                }
+                indiceNavegar++;
             }
 
-            if (esUltimoHijo && indice > nodo.getContador()) {
-                eliminarRecursivo(nodo.getHijoPorIndice(indice - 1), clave);
-            } else {
-                eliminarRecursivo(nodo.getHijoPorIndice(indice), clave);
+            if (nodo.getHijoPorIndice(indiceNavegar).getContador() < D) {
+                rellenarNodo(nodo, indiceNavegar);
+
+                indiceNavegar = 0;
+                while (indiceNavegar < nodo.getContador()) {
+                    int cmpFecha = clave.getFecha().compareTo(
+                            nodo.getClavePorIndice(indiceNavegar).getFecha());
+                    if (cmpFecha < 0) {
+                        break;
+                    }
+                    if (cmpFecha == 0) {
+                        int cmpCod = clave.getProducto().getCodigoBarra().compareTo(
+                                nodo.getClavePorIndice(indiceNavegar).getProducto().getCodigoBarra());
+                        if (cmpCod < 0) {
+                            break;
+                        }
+                    }
+                    indiceNavegar++;
+                }
             }
+
+            eliminarRecursivo(nodo.getHijoPorIndice(indiceNavegar), clave);
         }
     }
 

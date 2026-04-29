@@ -73,8 +73,12 @@ public class IniciarTransferenciaDialog extends javax.swing.JDialog {
         btnOrigen.setText("Seleccionar Origen");
         btnOrigen.addActionListener(this::btnOrigenActionPerformed);
 
+        cmbProductos.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
+
         btnProducto.setText("Seleccionar Producto");
         btnProducto.addActionListener(this::btnProductoActionPerformed);
+
+        cmbDestino.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
 
         btnDestino.setText("Seleccionar Destino");
         btnDestino.addActionListener(this::btnDestinoActionPerformed);
@@ -197,9 +201,23 @@ public class IniciarTransferenciaDialog extends javax.swing.JDialog {
                     JOptionPane.ERROR_MESSAGE
             );
         }
+
         try {
 
             this.producto = origen.getListaDesordenada().obtener(indiceSeleccionado);
+
+            if (!this.producto.isDisponible()) {
+
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Este producto esta en una transferencia en curso, no disponible",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+
+                return;
+            }
+
             btnDestino.setEnabled(true);
             cargarComboBoxSucursales(cmbDestino);
 
@@ -221,6 +239,19 @@ public class IniciarTransferenciaDialog extends javax.swing.JDialog {
         try {
 
             this.destino = sucursales.obtenerValor(indiceSeleccionado);
+
+            if (this.destino.getId().equals(this.origen.getId())) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Por favor selecciona una sucursal destino, diferente del origen",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                
+                return;
+            }
+            
+
             btnCriterio.setEnabled(true);
 
         } catch (ListaException ex) {
@@ -241,11 +272,20 @@ public class IniciarTransferenciaDialog extends javax.swing.JDialog {
 
         try {
             ListaEnlazadaGenerica<Sucursal> ruta = grafo.ejecutarDijkstra(origen.getId(), destino.getId(), esTiempo);
-            
+
+            if (ruta.getTamaño() == 0) {
+                JOptionPane.showMessageDialog(this,
+                        "No existe una ruta posible entre " + origen.getInfo() + " y " + destino.getInfo(),
+                        "Sin ruta",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             ProgresoPanel progreso = new ProgresoPanel(producto, ruta, grafo, esTiempo);
-            
+            producto.setDisponible(false);
             principal.agregarTransferencia(progreso);
-            
+            this.dispose();
+
         } catch (ListaException | ElementoNoEncontradoException ex) {
             JOptionPane.showMessageDialog(
                     this,

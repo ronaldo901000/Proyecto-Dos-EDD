@@ -3,6 +3,7 @@ package com.ronaldo.gestor.back.lectura;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.ronaldo.gestor.back.estructuras.grafo.Grafo;
+import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
 import com.ronaldo.gestor.back.exceptions.LecturaException;
 import java.io.FileReader;
@@ -19,7 +20,7 @@ public class LectorConexiones {
     private Grafo grafo;
     private boolean hayErrores;
     private int totalConexiones;
-    
+
     public LectorConexiones(Grafo grafo) {
         this.grafo = grafo;
     }
@@ -52,8 +53,15 @@ public class LectorConexiones {
                     int tiempo = Integer.parseInt(fila[2].trim());
                     double costo = Double.parseDouble(fila[3].trim());
 
-                    grafo.conectar(idOrigen, idDestino, tiempo, costo);
-                    totalConexiones++;
+                    try {
+
+                        grafo.conectar(idOrigen, idDestino, tiempo, costo);
+                        totalConexiones++;
+                    } catch (ElementoExistenteException e) {
+                        String error = "Linea " + nLinea + ": " + e.getMessage();
+                        log.println(error);
+                        hayErrores = true;
+                    }
                 } catch (NumberFormatException e) {
                     String error = "Linea " + nLinea + ": valor no numerico " + e.getMessage();
                     log.println(error);
@@ -74,7 +82,5 @@ public class LectorConexiones {
     public int getTotalConexiones() {
         return totalConexiones;
     }
-    
-    
 
 }

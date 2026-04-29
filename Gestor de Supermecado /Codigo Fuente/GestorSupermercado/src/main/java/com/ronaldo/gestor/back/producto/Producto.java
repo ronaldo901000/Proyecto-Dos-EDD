@@ -21,7 +21,8 @@ public class Producto {
     private double precio;
     private int existencias;
     private boolean datoInvalido;
-    
+    private boolean disponible;
+
     public Producto(String nombre, String codigoBarra, String categoria, String fechaVencimiento, String marca, double precio, int existencias) {
         this.nombre = nombre;
         this.codigoBarra = codigoBarra;
@@ -30,17 +31,16 @@ public class Producto {
         this.marca = marca;
         this.precio = precio;
         this.existencias = existencias;
+        this.disponible = true;
     }
 
     public void datosValidos() throws DatoInvalidoException {
-        
-        if(
-                StringUtils.isBlank(nombre) ||
-                StringUtils.isBlank(codigoBarra) ||
-                StringUtils.isBlank(categoria) ||
-                StringUtils.isBlank(fechaVencimiento) ||
-                StringUtils.isBlank(marca)
-          ){
+
+        if (StringUtils.isBlank(nombre)
+                || StringUtils.isBlank(codigoBarra)
+                || StringUtils.isBlank(categoria)
+                || StringUtils.isBlank(fechaVencimiento)
+                || StringUtils.isBlank(marca)) {
             datoInvalido = true;
             throw new DatoInvalidoException("Uno de los datos del producto viene vacio, o es invalido.");
         }
@@ -48,28 +48,27 @@ public class Producto {
         if (codigoBarra.length() != CARACTERES_CODIGO_BARRA) {
             throw new DatoInvalidoException("El codigo de barras debe tener EXACTAMENTE 10 caracteres");
         }
-        
-        
-        if(precio < 0){
+
+        if (precio < 0) {
             datoInvalido = true;
-            throw  new DatoInvalidoException("El precio no debe ser menor a Q.00");
+            throw new DatoInvalidoException("El precio no debe ser menor a Q.00");
         }
-        
-        if(existencias < 0){
+
+        if (existencias < 0) {
             datoInvalido = true;
-            throw  new DatoInvalidoException("Las existencias no debe ser menor a 0");
+            throw new DatoInvalidoException("Las existencias no debe ser menor a 0");
         }
-        
+
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        
+
         try {
             LocalDate.parse(fechaVencimiento, formato);
-            
+
         } catch (DateTimeParseException e) {
             datoInvalido = true;
-            throw new DatoInvalidoException("Error en el formato de fecha "+fechaVencimiento);
+            throw new DatoInvalidoException("Error en el formato de fecha " + fechaVencimiento);
         }
-        
+
     }
 
     public String getNombre() {
@@ -132,6 +131,12 @@ public class Producto {
         return datoInvalido;
     }
 
-    
-    
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
 }

@@ -80,4 +80,15 @@ public abstract class Lista {
         return this.tamaño == 0;
     }
 
+    public NodoLista getNodoInicial() {
+        return nodoInicial;
+    }
+
+    public NodoLista getNodoFinal() {
+        return nodoFinal;
+    }
+
+    
+    
+    
 }

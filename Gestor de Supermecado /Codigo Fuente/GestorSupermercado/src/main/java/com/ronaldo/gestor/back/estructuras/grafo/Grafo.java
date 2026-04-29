@@ -25,6 +25,7 @@ public class Grafo {
     /**
      *
      * @param sucursal
+     * @throws ElementoExistenteException
      */
     public void agregarSucursal(Sucursal sucursal) throws ElementoExistenteException {
 
@@ -53,12 +54,20 @@ public class Grafo {
      * @param costo
      * @throws ElementoNoEncontradoException
      */
-    public void conectar(String idOrigen, String idDestino, int tiempo, double costo) throws ElementoNoEncontradoException {
-
+    public void conectar(String idOrigen, String idDestino, int tiempo, double costo) throws ElementoNoEncontradoException, ElementoExistenteException {
         Sucursal temp = buscador.buscarSucursal(idOrigen, lista);
 
-        Arista nuevaConexion = new Arista(idDestino, tiempo, costo);
+        Arista arista = temp.getCabezaLista();
+        while (arista != null) {
+            if (arista.getIdDestino().equals(idDestino)) {
+                throw new ElementoExistenteException(
+                        "Ya existe una conexión de " + idOrigen + " hacia " + idDestino
+                );
+            }
+            arista = arista.getSiguiente();
+        }
 
+        Arista nuevaConexion = new Arista(idDestino, tiempo, costo);
         nuevaConexion.setSiguiente(temp.getCabezaLista());
         temp.setCabezaLista(nuevaConexion);
     }
@@ -118,7 +127,7 @@ public class Grafo {
 
                 if (nuevaDistancia < distancias[indiceVecino]) {
                     distancias[indiceVecino] = nuevaDistancia;
-                    anteriores[indiceVecino] = actual; // guardar de dónde vine
+                    anteriores[indiceVecino] = actual;
                 }
 
                 arista = arista.getSiguiente();
@@ -134,12 +143,10 @@ public class Grafo {
 
         ListaEnlazadaGenerica<Sucursal> ruta = new ListaEnlazadaGenerica<>();
 
-        // si no hay camino
         if (anteriores[indiceDestino] == -1 && indiceDestino != indiceOrigen) {
-            return ruta; // ruta vacía — sin camino posible
+            return ruta;
         }
 
-        // recorrer desde destino hacia origen usando el arreglo anteriores
         ListaEnlazadaGenerica<Sucursal> rutaInvertida = new ListaEnlazadaGenerica<>();
         int actual = indiceDestino;
 
@@ -148,7 +155,6 @@ public class Grafo {
             actual = anteriores[actual];
         }
 
-        // invertir para que quede origen → destino
         for (int i = rutaInvertida.getTamaño() - 1; i >= 0; i--) {
             ruta.agregarElemento(rutaInvertida.obtenerValor(i));
         }
@@ -177,6 +183,45 @@ public class Grafo {
             }
         }
         return indiceMinimo;
+    }
+
+    public void generarImagen(String nombreArchivo) {
+        String rutaDot = nombreArchivo.replace(".png", ".dot");
+        try (java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(rutaDot))) {
+            pw.println("digraph Grafo {");
+            pw.println("  rankdir=LR;");
+            pw.println("  node [shape=circle, style=filled, fillcolor=lightblue];");
+            pw.println("  edge [fontsize=10];");
+            for (int i = 0; i < lista.getTamaño(); i++) {
+                Sucursal s = lista.obtenerValor(i);
+                pw.println("  \"" + s.getId() + "\" [label=\"" + s.getId() + "\\n" + s.getNombre() + "\"];");
+                Arista arista = s.getCabezaLista();
+                while (arista != null) {
+                    pw.println("  \"" + s.getId() + "\" -> \"" + arista.getIdDestino() + "\""
+                            + " [label=\"t=" + arista.getTiempo()
+                            + "\\nc=" + arista.getCosto() + "\"];");
+                    arista = arista.getSiguiente();
+                }
+            }
+            pw.println("}");
+        } catch (Exception e) {
+            System.err.println("Error al generar .dot: " + e.getMessage());
+            return;
+        }
+        try {
+            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpng", rutaDot, "-o", nombreArchivo);
+            pb.redirectErrorStream(true);
+            Process proceso = pb.start();
+            String output = new String(proceso.getInputStream().readAllBytes());
+            int exitCode = proceso.waitFor();
+
+            if (exitCode != 0) {
+                System.err.println("Graphviz error: " + output);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error al ejecutar Graphviz: " + e.getMessage());
+        }
     }
 
     public ListaEnlazadaGenerica<Sucursal> getLista() {

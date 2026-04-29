@@ -7,6 +7,7 @@ import com.ronaldo.gestor.back.estructuras.arbol.bmas.ArbolBMas;
 import com.ronaldo.gestor.back.estructuras.grafo.Arista;
 import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
 import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
+import com.ronaldo.gestor.back.estructuras.lista.normal.NodoLista;
 import com.ronaldo.gestor.back.estructuras.lista.ordenada.ListaEnlazadaOrdenada;
 import com.ronaldo.gestor.back.estructuras.pilasYcolas.Cola;
 import com.ronaldo.gestor.back.estructuras.tablaHash.TablaHash;
@@ -99,7 +100,7 @@ public class Sucursal {
 
             if (this.tablaHash.buscar(p.getCodigoBarra()) != null) {
                 hayDuplicados = true;
-                continue; 
+                continue;
             }
 
             tablaHash.insertar(p, false);
@@ -267,6 +268,10 @@ public class Sucursal {
 
     public Cola getColaSalida() {
         return colaSalida;
+    }
+
+    public String getInfo() {
+        return "(" + id + ")" + nombre;
     }
 
 }

@@ -190,9 +190,16 @@ public class ArbolBMas {
         return res;
     }
 
+    private int localizarPosicionParaNavegar(NodoBMas nodo, String categoria) {
+        int contador = 0;
+        while (contador < nodo.getContadorClaves() && categoria.compareTo(nodo.getClavePorIndice(contador)) >= 0) {
+            contador++;
+        }
+        return contador;
+    }
+
     private int localizarPosicionDeClave(NodoBMas nodo, String categoria) {
         int contador = 0;
-
         while (contador < nodo.getContadorClaves() && categoria.compareTo(nodo.getClavePorIndice(contador)) > 0) {
             contador++;
         }
@@ -200,11 +207,7 @@ public class ArbolBMas {
     }
 
     private NodoBMas localizarHijo(NodoBMas nodo, String categoria) {
-        int indice = 0;
-
-        while (indice < nodo.getContadorClaves() && categoria.compareTo(nodo.getClavePorIndice(indice)) > 0) {
-            indice++;
-        }
+        int indice = localizarPosicionParaNavegar(nodo, categoria);
         return nodo.getHijoPorIndice(indice);
     }
 
@@ -277,7 +280,7 @@ public class ArbolBMas {
     private void eliminarRecursivo(NodoBMas nodo, String codigoBarra, String categoria)
             throws ElementoNoEncontradoException {
 
-        int indiceHijo = localizarPosicionDeClave(nodo, categoria);
+        int indiceHijo = localizarPosicionParaNavegar(nodo, categoria);
         NodoBMas hijo = localizarHijo(nodo, categoria);
 
         if (hijo.isEsHoja()) {

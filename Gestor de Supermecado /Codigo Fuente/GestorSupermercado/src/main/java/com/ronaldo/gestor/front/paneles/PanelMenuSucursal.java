@@ -31,6 +31,11 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         this.controlador = controlador;
         this.principal = principal;
         this.sucursal = sucursal;
+
+        txtTIngreso.setText("Tiempo Ingreso: " + sucursal.getTiempoIngreso() + "s");
+        txtTPreparacion.setText("Tiempo preparacion de traspaso: " + sucursal.getTiempoTraspaso() + "s");
+        txtIntervalo.setText("Intervalo de despacho: " + sucursal.getIntervaloDespacho() + "s");
+
         txtNombre.setText("Sucursal: " + sucursal.getNombre());
         txtUbicacion.setText("Ubicacion: " + sucursal.getUbicacion());
         txtID.setText("ID: " + sucursal.getId());
@@ -93,6 +98,12 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
         txtTotalProductos.setFont(new java.awt.Font("Liberation Sans", 1, 21)); // NOI18N
 
+        txtTIngreso.setFont(new java.awt.Font("Liberation Sans", 0, 21)); // NOI18N
+
+        txtTPreparacion.setFont(new java.awt.Font("Liberation Sans", 0, 21)); // NOI18N
+
+        txtIntervalo.setFont(new java.awt.Font("Liberation Sans", 0, 21)); // NOI18N
+
         javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
         panelEncabezado.setLayout(panelEncabezadoLayout);
         panelEncabezadoLayout.setHorizontalGroup(
@@ -101,15 +112,15 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
-                        .addComponent(txtUbicacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtUbicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTotalProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtTotalProductos, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(txtTIngreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtTIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTPreparacion, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTPreparacion, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtIntervalo, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtIntervalo, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                         .addGap(109, 109, 109))
                     .addGroup(panelEncabezadoLayout.createSequentialGroup()
                         .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -565,6 +576,12 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         if (texto != null) {
             try {
                 sucursal.eliminar(texto);
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Eliminacion exitosa",
+                        "Exito",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
             } catch (ElementoNoEncontradoException | EstructuraVaciaException ex) {
                 JOptionPane.showMessageDialog(
                         this,

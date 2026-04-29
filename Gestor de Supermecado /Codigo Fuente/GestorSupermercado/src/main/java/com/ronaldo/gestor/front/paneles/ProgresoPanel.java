@@ -2,6 +2,7 @@ package com.ronaldo.gestor.front.paneles;
 
 import com.ronaldo.gestor.back.estructuras.grafo.Grafo;
 import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
+import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.producto.Producto;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
 import com.ronaldo.gestor.back.tranferencia.Transferencia;
@@ -27,6 +28,27 @@ public class ProgresoPanel extends javax.swing.JPanel {
             boolean esTiempo) {
 
         initComponents();
+        StringBuilder builder = new StringBuilder();
+        try {
+            txtOrigen.setText("Origen: " + ruta.obtenerValor(0).getInfo());
+            txtDestino.setText("Destino: " + ruta.obtenerValor(ruta.getTamaño() - 1).getInfo());
+            txtProducto.setText("Producto: " + producto.getNombre());
+
+            for (int i = 0; i < ruta.getTamaño(); i++) {
+
+                Sucursal s = ruta.obtenerValor(i);
+
+                builder.append(s.getInfo());
+
+                if (i != ruta.getTamaño() - 1) {
+                    builder.append(" ► ");
+                }
+            }
+
+            txtRuta.setText(builder.toString());
+        } catch (ListaException ex) {
+            System.out.println(ex.getMessage());
+        }
 
         long inicio = System.currentTimeMillis();
 
@@ -34,9 +56,9 @@ public class ProgresoPanel extends javax.swing.JPanel {
         pasosTotales = (sucursales * 3) + (sucursales - 1);
         progresoActual = 0;
 
-        jProgressBar1.setValue(0);
-        jProgressBar1.setStringPainted(true);
-        jProgressBar1.setForeground(java.awt.Color.RED);
+        barraProgreso.setValue(0);
+        barraProgreso.setStringPainted(true);
+        barraProgreso.setForeground(java.awt.Color.RED);
 
         Transferencia hilo = new Transferencia(
                 producto,
@@ -49,8 +71,7 @@ public class ProgresoPanel extends javax.swing.JPanel {
             public void sucursalEntrada(Producto p, Sucursal s) {
                 SwingUtilities.invokeLater(() -> {
                     avanzarProgreso();
-                    txtInfo.append("[" + tiempo() + "] ► Producto en cola de ingreso — " + s.getNombre() + "\n");
-                    txtTiempo.setText("Tiempo: " + tiempo());
+                    txtInfo.append("[" + tiempo() + "] ► Producto en cola de ingreso — " + s.getInfo()+ "\n");
                     txtInfo.setCaretPosition(txtInfo.getDocument().getLength());
                 });
             }
@@ -59,8 +80,7 @@ public class ProgresoPanel extends javax.swing.JPanel {
             public void preparando(Producto p, Sucursal s) {
                 SwingUtilities.invokeLater(() -> {
                     avanzarProgreso();
-                    txtInfo.append("[" + tiempo() + "] ► Preparando traspaso en — " + s.getNombre() + "\n");
-                    txtTiempo.setText("Tiempo: " + tiempo());
+                    txtInfo.append("[" + tiempo() + "] ► Preparando traspaso en — (" + (s.getId()) + ") " + s.getNombre() + "\n");
                     txtInfo.setCaretPosition(txtInfo.getDocument().getLength());
                 });
             }
@@ -69,8 +89,7 @@ public class ProgresoPanel extends javax.swing.JPanel {
             public void despachando(Producto p, Sucursal s) {
                 SwingUtilities.invokeLater(() -> {
                     avanzarProgreso();
-                    txtInfo.append("[" + tiempo() + "] ► En cola de salida — " + s.getNombre() + "\n");
-                    txtTiempo.setText("Tiempo: " + tiempo());
+                    txtInfo.append("[" + tiempo() + "] ► En cola de salida — " + s.getInfo() + "\n");
                     txtInfo.setCaretPosition(txtInfo.getDocument().getLength());
                 });
             }
@@ -79,11 +98,10 @@ public class ProgresoPanel extends javax.swing.JPanel {
             public void viajando(Producto p, Sucursal origen, Sucursal destino, int tiempoViaje) {
                 SwingUtilities.invokeLater(() -> {
                     avanzarProgreso();
-                    txtInfo.append("[" + tiempo() + "] ✈ Viajando "
-                            + origen.getNombre() + " → "
-                            + destino.getNombre() + " ("
+                    txtInfo.append("[" + tiempo() + "] --► Viajando "
+                            + origen.getInfo() + " → "
+                            + destino.getInfo() + " ("
                             + tiempoViaje + "s)\n");
-                    txtTiempo.setText("Tiempo: " + tiempo());
                     txtInfo.setCaretPosition(txtInfo.getDocument().getLength());
                 });
             }
@@ -91,11 +109,10 @@ public class ProgresoPanel extends javax.swing.JPanel {
             @Override
             public void exito(Producto p, Sucursal destino) {
                 SwingUtilities.invokeLater(() -> {
-                    jProgressBar1.setValue(100);
-                    jProgressBar1.setForeground(java.awt.Color.GREEN);
+                    barraProgreso.setValue(100);
+                    barraProgreso.setForeground(java.awt.Color.GREEN);
 
-                    txtInfo.append("[" + tiempo() + "] ✓ Entregado en: " + destino.getNombre() + "\n");
-                    txtTiempo.setText("Tiempo total: " + tiempo());
+                    txtInfo.append("[" + tiempo() + "] ✓ Entregado en: " + destino.getInfo() + "\n");
                     txtInfo.setCaretPosition(txtInfo.getDocument().getLength());
                 });
             }
@@ -103,10 +120,9 @@ public class ProgresoPanel extends javax.swing.JPanel {
             @Override
             public void error(Producto p, String mensaje) {
                 SwingUtilities.invokeLater(() -> {
-                    jProgressBar1.setForeground(java.awt.Color.RED);
+                    barraProgreso.setForeground(java.awt.Color.RED);
 
                     txtInfo.append("[" + tiempo() + "] ✗ Error: " + mensaje + "\n");
-                    txtTiempo.setText("Error en: " + tiempo());
                     txtInfo.setCaretPosition(txtInfo.getDocument().getLength());
                 });
             }
@@ -124,15 +140,15 @@ public class ProgresoPanel extends javax.swing.JPanel {
         progresoActual++;
 
         int porcentaje = (int) ((progresoActual * 100.0) / pasosTotales);
-        jProgressBar1.setValue(porcentaje);
+        barraProgreso.setValue(porcentaje);
 
         // cambiar color según avance
         if (porcentaje < 30) {
-            jProgressBar1.setForeground(java.awt.Color.RED);
+            barraProgreso.setForeground(java.awt.Color.RED);
         } else if (porcentaje < 70) {
-            jProgressBar1.setForeground(java.awt.Color.ORANGE);
+            barraProgreso.setForeground(java.awt.Color.ORANGE);
         } else {
-            jProgressBar1.setForeground(java.awt.Color.GREEN);
+            barraProgreso.setForeground(java.awt.Color.GREEN);
         }
     }
 
@@ -140,20 +156,20 @@ public class ProgresoPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jProgressBar1 = new javax.swing.JProgressBar();
+        barraProgreso = new javax.swing.JProgressBar();
         txtOrigen = new javax.swing.JLabel();
-        txtRuta = new javax.swing.JLabel();
+        txtProducto = new javax.swing.JLabel();
         txtDestino = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtInfo = new javax.swing.JTextArea();
-        txtTiempo = new javax.swing.JLabel();
+        txtRuta = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(204, 204, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         txtOrigen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        txtRuta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtProducto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtDestino.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -164,25 +180,23 @@ public class ProgresoPanel extends javax.swing.JPanel {
         txtInfo.setRows(5);
         jScrollPane1.setViewportView(txtInfo);
 
-        txtTiempo.setText("jLabel1");
-        txtTiempo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtRuta.setFont(new java.awt.Font("Liberation Sans", 0, 13)); // NOI18N
+        txtRuta.setText("jLabel1");
+        txtRuta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(txtTiempo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(137, 137, 137))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                        .addGap(62, 62, 62)))
+                    .addComponent(txtRuta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(barraProgreso, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
+                .addGap(62, 62, 62)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtOrigen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtRuta, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                    .addComponent(txtProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                     .addComponent(txtDestino, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(21, 21, 21)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
@@ -199,23 +213,23 @@ public class ProgresoPanel extends javax.swing.JPanel {
                         .addGap(9, 9, 9)
                         .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(barraProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(txtTiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JProgressBar barraProgreso;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel txtDestino;
     private javax.swing.JTextArea txtInfo;
     private javax.swing.JLabel txtOrigen;
+    private javax.swing.JLabel txtProducto;
     private javax.swing.JLabel txtRuta;
-    private javax.swing.JLabel txtTiempo;
     // End of variables declaration//GEN-END:variables
 }
