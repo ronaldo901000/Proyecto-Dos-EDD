@@ -44,7 +44,6 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         btnTranferencias2 = new javax.swing.JButton();
         btnRed = new javax.swing.JButton();
-        btnTranferencias4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnCargarCSV = new javax.swing.JButton();
         panelSucursales = new javax.swing.JPanel();
@@ -120,8 +119,6 @@ public class PanelPrincipal extends javax.swing.JPanel {
         btnRed.setText("Red");
         btnRed.addActionListener(this::btnRedActionPerformed);
 
-        btnTranferencias4.setText("Estructuras");
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -130,9 +127,8 @@ public class PanelPrincipal extends javax.swing.JPanel {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnTranferencias2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRed, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnTranferencias4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnTranferencias2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                    .addComponent(btnRed, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -143,9 +139,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
                 .addComponent(btnTranferencias2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnRed, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnTranferencias4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -443,10 +437,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
         try {
             String rutaImagen = "grafo.png";
 
-            // 1. Generar la imagen
             controlador.getGrafo().generarImagen(rutaImagen);
-
-            // 2. Abrir el dialog
             RedDialog dialog = new RedDialog(rutaImagen);
             dialog.setVisible(true);
 
@@ -496,7 +487,6 @@ public class PanelPrincipal extends javax.swing.JPanel {
     private javax.swing.JButton btnNuevaSucursal;
     private javax.swing.JButton btnRed;
     private javax.swing.JButton btnTranferencias2;
-    private javax.swing.JButton btnTranferencias4;
     private javax.swing.JButton btnTransferencia;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

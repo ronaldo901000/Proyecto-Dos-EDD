@@ -308,21 +308,34 @@ public class ArbolAVL {
         }
     }
 
-    public void generarDOT(String nombreArchivo) {
-        try (FileWriter fw = new FileWriter(nombreArchivo); PrintWriter pw = new PrintWriter(fw)) {
+    public void generarImagen(String nombreArchivo) {
+        String rutaDot = nombreArchivo.replace(".pdf", ".dot");
 
+        try (FileWriter fw = new FileWriter(rutaDot); PrintWriter pw = new PrintWriter(fw)) {
             pw.println("digraph ArbolAVL {");
-            pw.println("  node [shape=circle, height=.1];");
-
+            pw.println("  graph [ranksep=0.5, nodesep=0.3];");
+            pw.println("  node [shape=circle, style=filled, fillcolor=lightblue, fixedsize=false, fontsize=10, width=0.5, height=0.5];");
             if (this.raiz != null) {
                 escribirNodoDot(this.raiz, pw);
             }
-
             pw.println("}");
-            System.out.println("Archivo " + nombreArchivo + " generado exitosamente.");
-
         } catch (IOException e) {
-            System.err.println("Error al abrir el archivo para DOT: " + e.getMessage());
+            System.err.println("Error al generar .dot: " + e.getMessage());
+            return;
+        }
+
+        try {
+            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpdf", rutaDot, "-o", nombreArchivo);
+            pb.redirectErrorStream(true);
+            Process proceso = pb.start();
+            proceso.waitFor();
+            System.out.println("PDF generado: " + nombreArchivo);
+
+            // Abrir automáticamente
+            java.awt.Desktop.getDesktop().open(new java.io.File(nombreArchivo));
+
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
         }
     }
 
@@ -331,7 +344,6 @@ public class ArbolAVL {
             return;
         }
 
-        // Usamos identityHashCode para replicar el comportamiento de la dirección de memoria de C++
         int idNodo = System.identityHashCode(nodo);
 
         pw.println("  nodo" + idNodo + " [label=\""
@@ -349,4 +361,5 @@ public class ArbolAVL {
             escribirNodoDot(nodo.getDerecho(), pw);
         }
     }
+
 }
