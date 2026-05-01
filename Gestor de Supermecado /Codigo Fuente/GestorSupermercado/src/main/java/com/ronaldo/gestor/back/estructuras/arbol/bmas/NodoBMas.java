@@ -11,7 +11,7 @@ import com.ronaldo.gestor.back.producto.Producto;
  */
 public class NodoBMas {
 
-    private static final int D = 2;
+    private static final int D = 10;
     private static final int MAX_HIJOS = 2 * D + 1;
     private static final int MAX_CLAVES = 2 * D;
     private static final int MIN_CLAVES = D;

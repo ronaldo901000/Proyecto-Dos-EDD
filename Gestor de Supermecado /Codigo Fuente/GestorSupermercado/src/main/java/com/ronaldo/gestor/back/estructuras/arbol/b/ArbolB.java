@@ -447,21 +447,33 @@ public class ArbolB {
         padre.setContador(padre.getContador() - 1);
     }
 
-    public void generarDOT(String nombreArchivo) {
-        try (FileWriter fw = new FileWriter(nombreArchivo); PrintWriter pw = new PrintWriter(fw)) {
+    public void generarImagen(String nombreArchivo) {
+        String rutaDot = nombreArchivo.replace(".pdf", ".dot");
 
+        try (FileWriter fw = new FileWriter(rutaDot); PrintWriter pw = new PrintWriter(fw)) {
             pw.println("digraph ArbolB {");
             pw.println("  node [shape=record, height=.1];");
-
             if (this.raiz != null) {
                 escribirNodoDot(this.raiz, pw);
             }
-
             pw.println("}");
-            System.out.println("Archivo " + nombreArchivo + " generado exitosamente.");
-
         } catch (IOException e) {
-            System.err.println("Error al abrir el archivo para DOT: " + e.getMessage());
+            System.err.println("Error al generar .dot: " + e.getMessage());
+            return;
+        }
+
+      
+        try {
+            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpdf", rutaDot, "-o", nombreArchivo);
+            pb.redirectErrorStream(true);
+            Process proceso = pb.start();
+            proceso.waitFor();
+            System.out.println("PDF generado: " + nombreArchivo);
+
+            // 3. Abrir el PDF automáticamente
+            java.awt.Desktop.getDesktop().open(new java.io.File(nombreArchivo));
+        } catch (Exception e) {
+            System.err.println("Error al generar imagen: " + e.getMessage());
         }
     }
 
@@ -483,12 +495,10 @@ public class ArbolB {
                     .append(" } | ");
         }
 
-        // último hijo
         label.append("<hijo").append(n).append(">");
 
         pw.println("  nodo" + idNodo + " [label=\"" + label.toString() + "\"];");
 
-        // conexiones
         if (!nodo.isHoja()) {
             for (int i = 0; i <= n; i++) {
                 NodoB hijo = nodo.getHijoPorIndice(i);

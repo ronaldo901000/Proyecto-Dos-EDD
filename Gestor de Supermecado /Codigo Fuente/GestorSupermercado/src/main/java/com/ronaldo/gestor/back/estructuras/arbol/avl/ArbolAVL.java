@@ -166,7 +166,6 @@ public class ArbolAVL {
      *
      * @param nombre
      * @return
-     * @throws ElementoNoEncontradoException
      */
     public Producto buscar(String nombre) {
         NodoAVL nodo = buscarRecursivo(raiz, nombre);
@@ -329,9 +328,7 @@ public class ArbolAVL {
             pb.redirectErrorStream(true);
             Process proceso = pb.start();
             proceso.waitFor();
-            System.out.println("PDF generado: " + nombreArchivo);
-
-            // Abrir automáticamente
+            
             java.awt.Desktop.getDesktop().open(new java.io.File(nombreArchivo));
 
         } catch (Exception e) {

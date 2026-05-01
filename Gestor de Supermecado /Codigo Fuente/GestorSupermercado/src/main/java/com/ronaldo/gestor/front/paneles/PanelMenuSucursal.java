@@ -85,6 +85,8 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         btnVerAVL = new javax.swing.JButton();
+        btnB = new javax.swing.JButton();
+        btnBMas = new javax.swing.JButton();
 
         panelEncabezado.setBackground(new java.awt.Color(204, 255, 204));
         panelEncabezado.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
@@ -425,8 +427,14 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("VISUALIZACIONES");
 
-        btnVerAVL.setText("Ver AVL");
+        btnVerAVL.setText("Ver Arbol AVL");
         btnVerAVL.addActionListener(this::btnVerAVLActionPerformed);
+
+        btnB.setText("Ver Arbol B");
+        btnB.addActionListener(this::btnBActionPerformed);
+
+        btnBMas.setText("Ver Arbol B +");
+        btnBMas.addActionListener(this::btnBMasActionPerformed);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -437,7 +445,10 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnVerAVL, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnVerAVL, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBMas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -446,6 +457,10 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnVerAVL, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnB, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(btnBMas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -637,7 +652,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
     private void btnVerAVLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerAVLActionPerformed
         try {
-            sucursal.getAvl().generarImagen("avl"+this.sucursal.getInfo()+".pdf");
+            sucursal.getAvl().generarImagen("avl-" + this.sucursal.getInfo() + ".pdf");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
                     "Error al generar el árbol: " + e.getMessage(),
@@ -645,6 +660,28 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnVerAVLActionPerformed
+
+    private void btnBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBActionPerformed
+        try {
+            sucursal.getB().generarImagen("b-" + this.sucursal.getInfo() + ".pdf");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar el árbol: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBActionPerformed
+
+    private void btnBMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBMasActionPerformed
+        try {
+            sucursal.getbMas().generarImagen("b-mas-" + this.sucursal.getInfo() + ".pdf");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar el árbol: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBMasActionPerformed
 
     private void cargarTabla(Lista lista) {
 
@@ -711,6 +748,8 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarConex;
+    private javax.swing.JButton btnB;
+    private javax.swing.JButton btnBMas;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscarPoFechas;
     private javax.swing.JButton btnEliminar;

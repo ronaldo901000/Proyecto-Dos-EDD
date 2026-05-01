@@ -16,7 +16,7 @@ public class ArbolBMas {
 
     private NodoBMas raiz;
     private ReestructuradorBMas reestructurador;
-    private static final int D = 2;
+    private static final int D = 10;
 
     public ArbolBMas() {
         this.reestructurador = new ReestructuradorBMas();
@@ -342,21 +342,31 @@ public class ArbolBMas {
         }
     }
 
-    public void generarDOT(String nombreArchivo) throws ElementoNoEncontradoException {
-        try (FileWriter fw = new FileWriter(nombreArchivo); PrintWriter pw = new PrintWriter(fw)) {
+    public void generarImagen(String nombreArchivo) throws ElementoNoEncontradoException {
+        
+        String rutaDot = nombreArchivo.replace(".pdf", ".dot");
 
+        try (FileWriter fw = new FileWriter(rutaDot); PrintWriter pw = new PrintWriter(fw)) {
             pw.println("digraph ArbolBMas {");
             pw.println("  node [shape=record, height=.1];");
-
             if (this.raiz != null) {
                 escribirNodoDot(this.raiz, pw);
             }
-
             pw.println("}");
-            System.out.println("Archivo " + nombreArchivo + " generado exitosamente.");
-
         } catch (IOException e) {
-            System.err.println("Error al abrir el archivo para DOT: " + e.getMessage());
+            System.err.println("Error al generar .dot: " + e.getMessage());
+            return;
+        }
+
+        try {
+            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpdf", rutaDot, "-o", nombreArchivo);
+            pb.redirectErrorStream(true);
+            Process proceso = pb.start();
+            proceso.waitFor();
+            
+            java.awt.Desktop.getDesktop().open(new java.io.File(nombreArchivo));
+        } catch (Exception e) {
+            System.err.println("Error al generar imagen: " + e.getMessage());
         }
     }
 
