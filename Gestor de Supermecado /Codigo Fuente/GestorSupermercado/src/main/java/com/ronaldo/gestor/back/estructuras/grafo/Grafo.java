@@ -12,7 +12,6 @@ import com.ronaldo.gestor.back.sucursal.Sucursal;
  */
 public class Grafo {
 
-    private Sucursal cabeza;
     private ListaEnlazadaGenerica<Sucursal> lista;
     private BuscadorSucursales buscador;
     private int totalSucursales;
@@ -28,21 +27,12 @@ public class Grafo {
      * @throws ElementoExistenteException
      */
     public void agregarSucursal(Sucursal sucursal) throws ElementoExistenteException {
-
         if (buscador.existeSucursal(sucursal.getId(), lista)) {
             throw new ElementoExistenteException(
                     "El ID '" + sucursal.getId() + "' ya está registrado, utiliza otro."
             );
         }
-
         lista.agregarElemento(sucursal);
-
-        if (cabeza == null) {
-            cabeza = sucursal;
-        } else {
-            sucursal.setSiguiente(cabeza);
-            cabeza = sucursal;
-        }
         this.totalSucursales++;
     }
 
@@ -78,6 +68,61 @@ public class Grafo {
         temp.setCabezaLista(nuevaConexion);
     }
 
+    public void eliminarSucursal(String idSucursal) throws ListaException, ElementoNoEncontradoException {
+
+        Sucursal sucursal = null;
+        for (int i = 0; i < lista.getTamaño(); i++) {
+            Sucursal s = lista.obtenerValor(i);
+            if (s.getId().equals(idSucursal)) {
+                sucursal = s;
+            }
+        }
+        if (sucursal == null) {
+            throw new ElementoNoEncontradoException("La sucursal con id: " + idSucursal + " no esta registrada.");
+        }
+
+        // Eliminar de la lista
+        lista.eliminarElemento(sucursal);
+        this.totalSucursales--;
+
+        // Eliminar referencias en listas de adyacencia de las demas sucursales
+        for (int i = 0; i < lista.getTamaño(); i++) {
+            Sucursal s = lista.obtenerValor(i);
+            eliminarArista(s, idSucursal);
+        }
+    }
+
+    private void eliminarArista(Sucursal sucursal, String idDestino) {
+        Arista actual = sucursal.getCabezaLista();
+
+        // Si la cabeza apunta a la sucursal eliminada
+        if (actual != null && actual.getIdDestino().equals(idDestino)) {
+            sucursal.setCabezaLista(actual.getSiguiente());
+            return;
+        }
+
+        // Buscar en el resto de la lista de aristas
+        Arista anterior = actual;
+        while (actual != null) {
+            if (actual.getIdDestino().equals(idDestino)) {
+                anterior.setSiguiente(actual.getSiguiente());
+                return;
+            }
+            anterior = actual;
+            actual = actual.getSiguiente();
+        }
+    }
+
+    public int calcularTotalProductos() throws ListaException{
+        int contador = 0;
+        
+        for (int i = 0; i < lista.getTamaño(); i++) {
+            contador += lista.obtenerValor(i).getListaDesordenada().getTamaño();
+        }
+        
+        return contador;
+    }
+    
     public ListaEnlazadaGenerica<Sucursal> ejecutarDijkstra(String idOrigen, String idDestino, boolean esTiempo) throws ListaException, ElementoNoEncontradoException {
         int n = this.totalSucursales;
         double[] distancias = new double[n];

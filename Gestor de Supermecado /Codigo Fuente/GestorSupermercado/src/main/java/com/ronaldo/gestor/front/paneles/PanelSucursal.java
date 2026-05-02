@@ -1,6 +1,8 @@
 package com.ronaldo.gestor.front.paneles;
 
 import com.ronaldo.gestor.back.controlador.Controlador;
+import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
+import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
 import com.ronaldo.gestor.front.dialogs.NuevaSucursalDialog;
 import com.ronaldo.gestor.front.frame.FrameGeneral;
@@ -18,7 +20,7 @@ public class PanelSucursal extends javax.swing.JPanel {
 
     public PanelSucursal(Sucursal sucursal, Controlador controlador, PanelPrincipal panel) {
         initComponents();
-        this.panel= panel;
+        this.panel = panel;
         this.sucursal = sucursal;
         this.controlador = controlador;
         txtID.setText(sucursal.getId());
@@ -102,16 +104,29 @@ public class PanelSucursal extends javax.swing.JPanel {
         );
 
         if (respuesta == JOptionPane.YES_OPTION) {
-            System.out.println("Seleccionaste: SÍ");
-           
-        } else {
-            System.out.println("Seleccionaste: CANCELAR o cerraste la ventana");
-            
+            try {
+                controlador.getGrafo().eliminarSucursal(sucursal.getId());
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Eliminacion realizada con exito",
+                        "Exito",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                panel.cargarSucursales();
+            } catch (ListaException | ElementoNoEncontradoException ex) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        ex.getMessage(),
+                        "Error en la eliminacion",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnIrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIrActionPerformed
-         FrameGeneral.ponerPanelEnFramePrincipal(new PanelMenuSucursal(sucursal, controlador, panel));
+        FrameGeneral.ponerPanelEnFramePrincipal(new PanelMenuSucursal(sucursal, controlador, panel));
     }//GEN-LAST:event_btnIrActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed

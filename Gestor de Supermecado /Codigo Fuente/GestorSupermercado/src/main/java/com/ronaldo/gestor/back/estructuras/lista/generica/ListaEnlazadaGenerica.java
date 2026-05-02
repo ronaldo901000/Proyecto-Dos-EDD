@@ -65,6 +65,38 @@ public class ListaEnlazadaGenerica<T> {
         return actual;
     }
 
+    public void eliminarElemento(T valor) throws ListaException {
+        if (estaVacia()) {
+            throw new ListaException("La lista está vacía.");
+        }
+
+        if (inicio.getValor().equals(valor)) {
+            inicio = inicio.getSiguiente();
+            if (inicio == null) {
+                fin = null;
+            }
+            tamaño--;
+            return;
+        }
+
+        NodoGenerico<T> anterior = inicio;
+        NodoGenerico<T> actual = inicio.getSiguiente();
+
+        while (actual != null) {
+            if (actual.getValor().equals(valor)) {
+                anterior.setSiguiente(actual.getSiguiente());
+                if (actual.getSiguiente() == null) {
+                    fin = anterior;
+                }
+                tamaño--;
+                return;
+            }
+            anterior = actual;
+            actual = actual.getSiguiente();
+        }
+
+        throw new ListaException("El elemento no existe en la lista.");
+    }
 
     public boolean estaVacia() {
         return inicio == null;

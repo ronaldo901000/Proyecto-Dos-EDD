@@ -1984,3 +1984,4 @@ Linea 992: valor no numérico For input string: "Home Appliances"
 Linea 993: valor no numérico For input string: "Electronics"
 Linea 994: valor no numérico For input string: "Baby"
 Linea 2: Ya existe una conexión de SUC-001 hacia SUC-002, Se actualizaron los pesos.
+Linea: 992      El codigo de barras 0000000004 ya ha sido registrado antes, elige otro. 

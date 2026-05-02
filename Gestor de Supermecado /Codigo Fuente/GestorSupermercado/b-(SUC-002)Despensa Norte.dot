@@ -1,0 +1,26 @@
+digraph ArbolB {
+  node [shape=record, height=.1];
+  nodo2054966402 [label="<hijo0> | { 2026-02-27\nYoga Blocks } | <hijo1>"];
+  nodo2054966402:hijo0 -> nodo1778079940;
+  nodo1778079940 [label="<hijo0> | { 2025-07-28\nCrispy Tofu Bites } | <hijo1> | { 2025-08-11\nPumpkin Spice Creamer } | <hijo2> | { 2025-11-29\nVegan Protein Powder } | <hijo3> | { 2026-01-04\nPeach & Mango Salsa } | <hijo4>"];
+  nodo1778079940:hijo0 -> nodo1029542024;
+  nodo1029542024 [label="<hijo0> | { 2025-04-16\nColorful Post-It Notes Set } | <hijo1> | { 2025-06-13\nElectric Pressure Washer } | <hijo2> | { 2025-06-17\nWireless Music Receiver } | <hijo3>"];
+  nodo1778079940:hijo1 -> nodo2110134840;
+  nodo2110134840 [label="<hijo0> | { 2025-07-31\nMini Cordless Vacuum Cleaner } | <hijo1> | { 2025-08-05\nColorful Post-It Notes Set } | <hijo2>"];
+  nodo1778079940:hijo2 -> nodo1669633586;
+  nodo1669633586 [label="<hijo0> | { 2025-10-12\nSmart Plug } | <hijo1> | { 2025-11-17\nPicnic Blanket } | <hijo2> | { 2025-11-19\nVegan Cheese } | <hijo3> | { 2025-11-24\nNut Butter Cups } | <hijo4>"];
+  nodo1778079940:hijo3 -> nodo249351753;
+  nodo249351753 [label="<hijo0> | { 2025-12-11\nChocolate Chip Energy Balls } | <hijo1> | { 2025-12-19\nElectric Air Pump } | <hijo2>"];
+  nodo1778079940:hijo4 -> nodo1607780042;
+  nodo1607780042 [label="<hijo0> | { 2026-01-28\nSpicy Avocado Salsa } | <hijo1> | { 2026-01-30\nHerbal Tea Infuser } | <hijo2> | { 2026-02-20\nPortable Laptop Table } | <hijo3>"];
+  nodo2054966402:hijo1 -> nodo302911698;
+  nodo302911698 [label="<hijo0> | { 2026-03-30\nBoard Game Storage } | <hijo1> | { 2026-08-04\nZesty Cilantro Lime Dressing } | <hijo2> | { 2026-11-06\nSmartwatch } | <hijo3>"];
+  nodo302911698:hijo0 -> nodo1442587047;
+  nodo1442587047 [label="<hijo0> | { 2026-03-20\nMarinara Parmesan Baked Ziti } | <hijo1> | { 2026-03-24\nAlmond Flour Brownies } | <hijo2>"];
+  nodo302911698:hijo1 -> nodo1035604951;
+  nodo1035604951 [label="<hijo0> | { 2026-05-14\nCinnamon Raisin Bread } | <hijo1> | { 2026-06-07\nRicotta Cheese } | <hijo2> | { 2026-07-14\nLED Disco Ball Light } | <hijo3>"];
+  nodo302911698:hijo2 -> nodo1143038012;
+  nodo1143038012 [label="<hijo0> | { 2026-08-25\nYoga Strap } | <hijo1> | { 2026-10-14\nLightweight Rain Jacket } | <hijo2>"];
+  nodo302911698:hijo3 -> nodo650862826;
+  nodo650862826 [label="<hijo0> | { 2026-11-25\nLow-Fat Cottage Cheese } | <hijo1> | { 2026-11-30\nDigital Wireless Meat Thermometer } | <hijo2> | { 2026-12-29\nCompressed Towel Tablets } | <hijo3>"];
+}

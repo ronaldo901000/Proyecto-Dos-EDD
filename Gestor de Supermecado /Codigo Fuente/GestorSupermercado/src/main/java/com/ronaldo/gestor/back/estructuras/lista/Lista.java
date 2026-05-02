@@ -46,6 +46,21 @@ public abstract class Lista {
         this.tamaño--;
     }
 
+    public Producto getProductoPorCodigoBarra(String codigoBarra) throws ElementoNoEncontradoException {
+        NodoLista nodo = this.nodoInicial;
+
+        while (nodo != null && !nodo.getElemento().getCodigoBarra().equals(codigoBarra)) {
+            nodo = nodo.getSiguienteNodo();
+        }
+
+        if (nodo == null) {
+            throw new ElementoNoEncontradoException("No existe ningun producto con codigo: " + codigoBarra);
+        }
+
+        return nodo.getElemento();
+
+    }
+
     protected NodoLista obtenerNodo(int indice) throws ElementoNoEncontradoException {
         if (indice < 0 || indice >= tamaño) {
             throw new ElementoNoEncontradoException("Indice " + indice + " fuera de rango.");
@@ -88,7 +103,4 @@ public abstract class Lista {
         return nodoFinal;
     }
 
-    
-    
-    
 }

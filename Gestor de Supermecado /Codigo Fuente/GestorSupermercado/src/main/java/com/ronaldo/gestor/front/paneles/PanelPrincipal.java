@@ -28,6 +28,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
         panelTransferencias.setLayout(new BoxLayout(panelTransferencias, BoxLayout.Y_AXIS));
         this.controlador = controlador;
         cargarSucursales();
+        actualizarTotalProductos();
 
     }
 
@@ -132,12 +133,12 @@ public class PanelPrincipal extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnTranferencias2, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                    .addComponent(btnRed, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnRed, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,7 +247,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Total Sucursales");
 
-        txtTotalSucursales.setFont(new java.awt.Font("Liberation Sans", 0, 36)); // NOI18N
+        txtTotalSucursales.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
         txtTotalSucursales.setForeground(new java.awt.Color(0, 153, 51));
         txtTotalSucursales.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtTotalSucursales.setText("0");
@@ -278,7 +279,7 @@ public class PanelPrincipal extends javax.swing.JPanel {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Transferencias");
 
-        txtTotalTranferencias.setFont(new java.awt.Font("Liberation Sans", 0, 36)); // NOI18N
+        txtTotalTranferencias.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
         txtTotalTranferencias.setForeground(new java.awt.Color(255, 153, 51));
         txtTotalTranferencias.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtTotalTranferencias.setText("0");
@@ -304,14 +305,17 @@ public class PanelPrincipal extends javax.swing.JPanel {
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel7.setForeground(new java.awt.Color(51, 204, 0));
         jPanel7.setOpaque(false);
 
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Total Productos");
 
-        txtTotalProductos.setFont(new java.awt.Font("Liberation Sans", 0, 36)); // NOI18N
+        txtTotalProductos.setFont(new java.awt.Font("Liberation Sans", 1, 36)); // NOI18N
+        txtTotalProductos.setForeground(new java.awt.Color(51, 204, 0));
         txtTotalProductos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        txtTotalProductos.setText("0");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -410,7 +414,8 @@ public class PanelPrincipal extends javax.swing.JPanel {
         CargaCSVDialog dialog = new CargaCSVDialog(controlador);
         dialog.setVisible(true);
         ListaEnlazadaGenerica<Sucursal> nuevos = dialog.getSucursales();
-
+        actualizarTotalProductos();
+        
         if (nuevos == null) {
             return;
         }
@@ -490,6 +495,17 @@ public class PanelPrincipal extends javax.swing.JPanel {
         panelTransferencias.revalidate();
         panelTransferencias.repaint();
 
+    }
+
+    public void actualizarTotalProductos() {
+        try {
+            txtTotalProductos.setText(String.valueOf(controlador.getGrafo().calcularTotalProductos()));
+        } catch (ListaException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

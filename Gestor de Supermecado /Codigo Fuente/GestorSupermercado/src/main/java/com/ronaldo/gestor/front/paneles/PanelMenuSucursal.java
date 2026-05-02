@@ -15,7 +15,6 @@ import com.ronaldo.gestor.back.producto.Producto;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
 import com.ronaldo.gestor.front.dialogs.NuevaConexionDialog;
 import com.ronaldo.gestor.front.dialogs.NuevoProductoDialog;
-import com.ronaldo.gestor.front.dialogs.RedDialog;
 import com.ronaldo.gestor.front.frame.FrameGeneral;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -203,7 +202,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         jLabel2.setText("Buscar Producto");
 
         cmbTipoBusqueda.setFont(new java.awt.Font("Liberation Sans", 0, 20)); // NOI18N
-        cmbTipoBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALV (Nombre)", "Hash (Codigo Barras)", "B+ (Categoria)" }));
+        cmbTipoBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALV (Nombre)", "Hash (Codigo Barras)", "B+ (Categoria)", "Lista Ordenada  (Codigo Barras)", "Lista Desordenada  (Codigo Barras)" }));
 
         btnBuscar.setBackground(new java.awt.Color(209, 209, 54));
         btnBuscar.setFont(new java.awt.Font("Liberation Sans", 1, 20)); // NOI18N
@@ -269,22 +268,19 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(0, 124, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(178, 178, 178)
-                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 124, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(fieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
-                                .addComponent(cmbTipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addComponent(fieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addComponent(cmbTipoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(253, Short.MAX_VALUE))
         );
@@ -325,11 +321,11 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
             },
             new String [] {
-                "No.", "Codigo", "Nombre", "Categoria", "Fecha Vencimiento", "Marca", "Precio", "Existencias"
+                "No.", "Codigo", "Nombre", "Categoria", "Fecha Vencimiento", "Marca", "Precio", "Existencias", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -353,7 +349,6 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
@@ -367,6 +362,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnListar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30))))
+            .addComponent(jScrollPane2)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -513,6 +509,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         jLabel9.setText("Numero Repeticiones:");
 
         btnIniciarAnalisis.setBackground(new java.awt.Color(0, 153, 102));
+        btnIniciarAnalisis.setFont(new java.awt.Font("Liberation Sans", 1, 16)); // NOI18N
         btnIniciarAnalisis.setForeground(new java.awt.Color(0, 0, 0));
         btnIniciarAnalisis.setText("INICIAR");
         btnIniciarAnalisis.addActionListener(this::btnIniciarAnalisisActionPerformed);
@@ -759,6 +756,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         FrameGeneral.ponerPanelEnFramePrincipal(principal);
+        principal.actualizarTotalProductos();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
@@ -803,6 +801,14 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 case 2:
                     lista = sucursal.getbMas().buscar(atributoBusqueda);
                     break;
+                case 3:
+                    Producto pOrdenada = sucursal.getListaOrdenada().getProductoPorCodigoBarra(atributoBusqueda);
+                    lista.insertar(pOrdenada);
+                    break;
+                case 4:
+                    Producto pDesordenada = sucursal.getListaDesordenada().getProductoPorCodigoBarra(atributoBusqueda);
+                    lista.insertar(pDesordenada);
+                    break;
             }
 
         } catch (ElementoNoEncontradoException ex) {
@@ -826,7 +832,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
             return;
         }
 
-        cargarTabla(lista);
+        cargarTablaProductos(lista);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnBuscarPoFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPoFechasActionPerformed
@@ -855,7 +861,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
             );
             return;
         }
-        cargarTabla(lista);
+        cargarTablaProductos(lista);
     }//GEN-LAST:event_btnBuscarPoFechasActionPerformed
 
     private void btnListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarActionPerformed
@@ -871,7 +877,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
             );
             return;
         }
-        cargarTabla(lista);
+        cargarTablaProductos(lista);
     }//GEN-LAST:event_btnListarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -1001,7 +1007,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         }
     }
 
-    private void cargarTabla(Lista lista) {
+    private void cargarTablaProductos(Lista lista) {
 
         DefaultTableModel modelo = (DefaultTableModel) tablaResultado.getModel();
         modelo.setRowCount(0);
@@ -1009,6 +1015,10 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         for (int i = 0; i < lista.getTamaño(); i++) {
             try {
                 Producto p = lista.obtener(i);
+                String estado = "Disponible";
+                if(!p.isDisponible()){
+                    estado = "En transito";
+                }
 
                 modelo.addRow(new Object[]{
                     i + 1,
@@ -1018,7 +1028,8 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                     p.getFechaVencimiento(),
                     p.getMarca(),
                     "Q." + p.getPrecio(),
-                    p.getExistencias()
+                    p.getExistencias(),
+                    estado
                 });
 
             } catch (ElementoNoEncontradoException ex) {
