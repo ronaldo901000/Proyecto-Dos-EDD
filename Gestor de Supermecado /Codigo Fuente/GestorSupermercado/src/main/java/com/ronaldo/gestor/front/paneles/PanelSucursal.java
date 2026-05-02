@@ -51,7 +51,7 @@ public class PanelSucursal extends javax.swing.JPanel {
         btnEliminar.setBackground(new java.awt.Color(255, 51, 51));
         btnEliminar.setFont(new java.awt.Font("Liberation Sans", 1, 16)); // NOI18N
         btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
-        btnEliminar.setText("ELIMIAR");
+        btnEliminar.setText("ELIMINAR");
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
 
         btnEditar.setBackground(new java.awt.Color(255, 204, 51));

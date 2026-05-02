@@ -29,23 +29,41 @@ public class ProgresoPanel extends javax.swing.JPanel {
 
         initComponents();
         StringBuilder builder = new StringBuilder();
+
         try {
+            int tiempoEstimado = grafo.calcularTiempoEstimado(ruta, esTiempo);
+
+            int minutos = tiempoEstimado / 60;
+            int segundos = tiempoEstimado % 60;
+
+            txtTiempoEstimado.setText("Tiempo estimado: " + minutos + ":" + segundos);
+
             txtOrigen.setText("Origen: " + ruta.obtenerValor(0).getInfo());
             txtDestino.setText("Destino: " + ruta.obtenerValor(ruta.getTamaño() - 1).getInfo());
             txtProducto.setText("Producto: " + producto.getNombre());
+            String parametro = "Tiempo";
+            
+            if (!esTiempo) {
+                parametro = "Costo";
+            }
+            txtParametro.setText("Peso: "+parametro);
 
+            builder.append("RUTA: \n");
             for (int i = 0; i < ruta.getTamaño(); i++) {
 
                 Sucursal s = ruta.obtenerValor(i);
+                if (i == 0) {
+                    builder.append(" ► " + s.getInfo() + "\n");
+                } else if (i == ruta.getTamaño() - 1) {
+                    builder.append(" |► " + s.getInfo() + "\n");
 
-                builder.append(s.getInfo());
-
-                if (i != ruta.getTamaño() - 1) {
-                    builder.append(" ► ");
+                } else {
+                    builder.append(" - " + s.getInfo() + "\n");
                 }
+
             }
 
-            txtRuta.setText(builder.toString());
+            txtAreaRuta.setText(builder.toString());
         } catch (ListaException ex) {
             System.out.println(ex.getMessage());
         }
@@ -71,7 +89,7 @@ public class ProgresoPanel extends javax.swing.JPanel {
             public void sucursalEntrada(Producto p, Sucursal s) {
                 SwingUtilities.invokeLater(() -> {
                     avanzarProgreso();
-                    txtInfo.append("[" + tiempo() + "] ► Producto en cola de ingreso — " + s.getInfo()+ "\n");
+                    txtInfo.append("[" + tiempo() + "] ► Producto en cola de ingreso — " + s.getInfo() + "\n");
                     txtInfo.setCaretPosition(txtInfo.getDocument().getLength());
                 });
             }
@@ -162,7 +180,10 @@ public class ProgresoPanel extends javax.swing.JPanel {
         txtDestino = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtInfo = new javax.swing.JTextArea();
-        txtRuta = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtAreaRuta = new javax.swing.JTextArea();
+        txtTiempoEstimado = new javax.swing.JLabel();
+        txtParametro = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(204, 204, 255));
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -180,9 +201,16 @@ public class ProgresoPanel extends javax.swing.JPanel {
         txtInfo.setRows(5);
         jScrollPane1.setViewportView(txtInfo);
 
-        txtRuta.setFont(new java.awt.Font("Liberation Sans", 0, 13)); // NOI18N
-        txtRuta.setText("jLabel1");
-        txtRuta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtAreaRuta.setEditable(false);
+        txtAreaRuta.setColumns(20);
+        txtAreaRuta.setRows(5);
+        jScrollPane2.setViewportView(txtAreaRuta);
+
+        txtTiempoEstimado.setFont(new java.awt.Font("Liberation Sans", 1, 16)); // NOI18N
+        txtTiempoEstimado.setForeground(new java.awt.Color(0, 153, 102));
+        txtTiempoEstimado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        txtParametro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -190,35 +218,42 @@ public class ProgresoPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtRuta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(barraProgreso, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))
-                .addGap(62, 62, 62)
+                .addComponent(barraProgreso, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtOrigen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                    .addComponent(txtDestino, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
+                    .addComponent(txtProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                    .addComponent(txtDestino, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTiempoEstimado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtParametro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)
-                        .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtParametro, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(barraProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtRuta, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(txtTiempoEstimado, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(barraProgreso, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -226,10 +261,13 @@ public class ProgresoPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barraProgreso;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea txtAreaRuta;
     private javax.swing.JLabel txtDestino;
     private javax.swing.JTextArea txtInfo;
     private javax.swing.JLabel txtOrigen;
+    private javax.swing.JLabel txtParametro;
     private javax.swing.JLabel txtProducto;
-    private javax.swing.JLabel txtRuta;
+    private javax.swing.JLabel txtTiempoEstimado;
     // End of variables declaration//GEN-END:variables
 }

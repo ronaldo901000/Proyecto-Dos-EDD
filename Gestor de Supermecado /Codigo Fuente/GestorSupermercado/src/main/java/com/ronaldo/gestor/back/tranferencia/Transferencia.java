@@ -71,6 +71,7 @@ public class Transferencia extends Thread {
             producto.setDisponible(true);
             
             if (p != null) {
+                
                 listener.error(producto, "El producto ya existe en " + destino.getNombre());
                 return;
             }

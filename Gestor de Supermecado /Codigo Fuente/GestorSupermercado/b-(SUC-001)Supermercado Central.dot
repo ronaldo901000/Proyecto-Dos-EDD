@@ -1,0 +1,26 @@
+digraph ArbolB {
+  node [shape=record, height=.1];
+  nodo800297903 [label="<hijo0> | { 2026-03-25\nChilli Lime Corn on the Cob } | <hijo1>"];
+  nodo800297903:hijo0 -> nodo2101846178;
+  nodo2101846178 [label="<hijo0> | { 2025-07-13\nCinnamon Sugar Donuts } | <hijo1> | { 2025-11-17\nGranola Bars } | <hijo2> | { 2026-01-03\nSesame Seeds } | <hijo3>"];
+  nodo2101846178:hijo0 -> nodo2069550724;
+  nodo2069550724 [label="<hijo0> | { 2025-05-10\nBodyweight Resistance Bands } | <hijo1> | { 2025-06-18\nNatural Soy Candles } | <hijo2> | { 2025-06-22\nGarden Vegetable Soup } | <hijo3> | { 2025-06-29\nLightweight Rain Jacket } | <hijo4>"];
+  nodo2101846178:hijo1 -> nodo67747564;
+  nodo67747564 [label="<hijo0> | { 2025-09-16\nArcade Game Machine } | <hijo1> | { 2025-10-02\nSpicy BBQ Sauce } | <hijo2>"];
+  nodo2101846178:hijo2 -> nodo1250388619;
+  nodo1250388619 [label="<hijo0> | { 2025-11-25\nSmartphone Photography Ring Light } | <hijo1> | { 2025-12-12\nHeat-Resistant Silicone Mat } | <hijo2>"];
+  nodo2101846178:hijo3 -> nodo631716190;
+  nodo631716190 [label="<hijo0> | { 2026-01-05\nChipotle Seasoning Blend } | <hijo1> | { 2026-02-10\nFruit and Nut Energy Bites } | <hijo2> | { 2026-02-21\nBerries Medley } | <hijo3> | { 2026-03-21\nAir Purifier } | <hijo4>"];
+  nodo800297903:hijo1 -> nodo149169560;
+  nodo149169560 [label="<hijo0> | { 2026-04-22\nFitness Smartwatch } | <hijo1> | { 2026-07-09\nRice Pilaf Mix } | <hijo2> | { 2026-08-26\nGreen Tea Matcha Powder } | <hijo3> | { 2026-10-28\nFrozen Mixed Berries } | <hijo4>"];
+  nodo149169560:hijo0 -> nodo1104352438;
+  nodo1104352438 [label="<hijo0> | { 2026-04-03\nCoconut Chia Seed Pudding } | <hijo1> | { 2026-04-09\nClassic Cheesecake Mix } | <hijo2>"];
+  nodo149169560:hijo1 -> nodo821165365;
+  nodo821165365 [label="<hijo0> | { 2026-05-02\nChocolate Hazelnut Granola } | <hijo1> | { 2026-05-18\nGranola Cereal } | <hijo2> | { 2026-06-05\nGarlic and Herb Cream Cheese } | <hijo3> | { 2026-06-13\nVegetable Quinoa Bowl } | <hijo4>"];
+  nodo149169560:hijo2 -> nodo746606524;
+  nodo746606524 [label="<hijo0> | { 2026-08-09\nCeramic Cookware Set } | <hijo1> | { 2026-08-13\nDried Mango Slices } | <hijo2> | { 2026-08-25\nSmart Thermostat with Wi-Fi } | <hijo3>"];
+  nodo149169560:hijo3 -> nodo98662225;
+  nodo98662225 [label="<hijo0> | { 2026-08-31\nCinnamon Spiced Almonds } | <hijo1> | { 2026-09-01\nFloral Wrap Top } | <hijo2> | { 2026-10-01\nMulti-Cooker } | <hijo3>"];
+  nodo149169560:hijo4 -> nodo1548658175;
+  nodo1548658175 [label="<hijo0> | { 2026-11-01\nElectric Butter Churn } | <hijo1> | { 2026-11-08\nBaked Falafel } | <hijo2> | { 2026-11-29\nRechargeable Laptop Battery Pack } | <hijo3> | { 2026-12-17\nOver-the-Door Shoe Organizer } | <hijo4>"];
+}

@@ -6,6 +6,7 @@ import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
 import com.ronaldo.gestor.back.exceptions.LecturaException;
+import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.lectura.LectorConexiones;
 import com.ronaldo.gestor.back.lectura.LectorProductos;
 import com.ronaldo.gestor.back.lectura.LectorSucursales;
@@ -287,36 +288,25 @@ public class CargaCSVDialog extends javax.swing.JDialog {
                 LectorProductos lector = new LectorProductos();
                 try {
 
-                    SeleccionSucursalDialog dialog = new SeleccionSucursalDialog(controlador.getGrafo().getLista());
-                    dialog.setVisible(true);
-                    //pedir sucursal
-                    Sucursal sucursal = dialog.getSeleccionado();
+                    lector.leerCSVProductos(ruta, controlador.getGrafo().getLista());
 
-                    if(sucursal ==null){
-                        return;
-                    }
-                    
-                    ListaEnlazada nuevosProductos = lector.leerCSVProductos(ruta);
-
-                    sucursal.insertarListaProductos(nuevosProductos);
-
-                    if (lector.isHayErrores() || sucursal.isHayDuplicados()) {
+                    if (lector.isHayErrores()) {
 
                         JOptionPane.showMessageDialog(
                                 this,
-                                "Hay Errores en el csv, Revisa errors.log \n Se agregaron " + sucursal.getTotalNuevosInsertados() + " productos nuevos.",
-                                "Carga exitosa",
+                                "Hay Errores en el csv, Revisa errors.log",
+                                "Carga",
                                 JOptionPane.INFORMATION_MESSAGE
                         );
                     } else {
                         JOptionPane.showMessageDialog(
                                 this,
-                                "Carga exitosa, se agregaron " + sucursal.getTotalNuevosInsertados() + " productos nuevos.",
+                                "Carga exitosa CVS sin errores",
                                 "Carga exitosa",
                                 JOptionPane.INFORMATION_MESSAGE
                         );
                     }
-                } catch (LecturaException | ElementoNoEncontradoException | ElementoExistenteException | IOException ex) {
+                } catch (LecturaException | IOException | ListaException ex) {
 
                     JOptionPane.showMessageDialog(
                             this,

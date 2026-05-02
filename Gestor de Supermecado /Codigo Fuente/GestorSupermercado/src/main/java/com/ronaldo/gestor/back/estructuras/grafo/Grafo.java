@@ -53,6 +53,7 @@ public class Grafo {
      * @param tiempo
      * @param costo
      * @throws ElementoNoEncontradoException
+     * @throws ElementoExistenteException
      */
     public void conectar(String idOrigen, String idDestino, int tiempo, double costo) throws ElementoNoEncontradoException, ElementoExistenteException {
         Sucursal temp = buscador.buscarSucursal(idOrigen, lista);
@@ -60,8 +61,13 @@ public class Grafo {
         Arista arista = temp.getCabezaLista();
         while (arista != null) {
             if (arista.getIdDestino().equals(idDestino)) {
+
+                //actualizar arista
+                arista.setTiempo(tiempo);
+                arista.setCosto(costo);
+
                 throw new ElementoExistenteException(
-                        "Ya existe una conexión de " + idOrigen + " hacia " + idDestino
+                        "Ya existe una conexión de " + idOrigen + " hacia " + idDestino + ", Se actualizaron los pesos."
                 );
             }
             arista = arista.getSiguiente();
@@ -222,6 +228,34 @@ public class Grafo {
         } catch (Exception e) {
             System.err.println("Error al ejecutar Graphviz: " + e.getMessage());
         }
+    }
+
+    public int calcularTiempoEstimado(ListaEnlazadaGenerica<Sucursal> ruta, boolean esTiempo) throws ListaException {
+        int tiempo = 0;
+
+        for (int i = 0; i < ruta.getTamaño(); i++) {
+            Sucursal s = ruta.obtenerValor(i);
+
+            tiempo += s.getTiempoIngreso();
+
+            if (i < ruta.getTamaño() - 1) {
+                tiempo += s.getTiempoTraspaso();
+                tiempo += s.getIntervaloDespacho();
+
+                Sucursal siguiente = ruta.obtenerValor(i + 1);
+                Arista arista = s.getCabezaLista();
+
+                while (arista != null) {
+                    if (arista.getIdDestino().equals(siguiente.getId())) {
+                        tiempo += esTiempo ? arista.getTiempo() : arista.getCosto();
+                        break;
+                    }
+                    arista = arista.getSiguiente();
+                }
+            }
+        }
+
+        return tiempo;
     }
 
     public ListaEnlazadaGenerica<Sucursal> getLista() {

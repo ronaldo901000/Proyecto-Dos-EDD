@@ -139,4 +139,7 @@ public class Producto {
         this.disponible = disponible;
     }
 
+    public String getInfo(){
+        return "("+this.codigoBarra+") "+this.nombre;
+    }
 }
