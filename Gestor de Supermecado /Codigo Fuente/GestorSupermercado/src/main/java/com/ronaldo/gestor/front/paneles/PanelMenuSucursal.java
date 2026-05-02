@@ -92,6 +92,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         btnVerAVL = new javax.swing.JButton();
         btnB = new javax.swing.JButton();
         btnBMas = new javax.swing.JButton();
+        btnVerHash = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -448,27 +449,43 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("VISUALIZACIONES");
 
+        btnVerAVL.setBackground(new java.awt.Color(255, 204, 102));
+        btnVerAVL.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnVerAVL.setForeground(new java.awt.Color(0, 0, 0));
         btnVerAVL.setText("Ver Arbol AVL");
         btnVerAVL.addActionListener(this::btnVerAVLActionPerformed);
 
+        btnB.setBackground(new java.awt.Color(255, 204, 102));
+        btnB.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnB.setForeground(new java.awt.Color(0, 0, 0));
         btnB.setText("Ver Arbol B");
         btnB.addActionListener(this::btnBActionPerformed);
 
+        btnBMas.setBackground(new java.awt.Color(255, 204, 102));
+        btnBMas.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnBMas.setForeground(new java.awt.Color(0, 0, 0));
         btnBMas.setText("Ver Arbol B +");
         btnBMas.addActionListener(this::btnBMasActionPerformed);
+
+        btnVerHash.setBackground(new java.awt.Color(255, 204, 102));
+        btnVerHash.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnVerHash.setForeground(new java.awt.Color(0, 0, 0));
+        btnVerHash.setText("Ver Tabla Hash");
+        btnVerHash.addActionListener(this::btnVerHashActionPerformed);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(11, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBMas, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnB, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnVerAVL, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnBMas, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnB, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnVerAVL, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                    .addComponent(btnVerHash, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -476,10 +493,12 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnVerAVL, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(21, 21, 21)
                 .addComponent(btnB, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnBMas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnVerHash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -972,6 +991,17 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnIniciarAnalisisActionPerformed
 
+    private void btnVerHashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerHashActionPerformed
+        try {
+            sucursal.getTablaHash().generarImagen("tabla-hash-" + this.sucursal.getInfo() + ".pdf");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al generar el tabla hash: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnVerHashActionPerformed
+
     private void cargarTablaRendimiento(JTable tabla, ListaEnlazadaGenerica<ResultadoRendimiento> lista, String busqueda, JLabel label) {
 
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
@@ -1016,7 +1046,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
             try {
                 Producto p = lista.obtener(i);
                 String estado = "Disponible";
-                if(!p.isDisponible()){
+                if (!p.isDisponible()) {
                     estado = "En transito";
                 }
 
@@ -1087,6 +1117,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
     private javax.swing.JButton btnListar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnVerAVL;
+    private javax.swing.JButton btnVerHash;
     private javax.swing.JComboBox<String> cmbTipoBusqueda;
     private javax.swing.JTextField fieldBuscar;
     private javax.swing.JLabel jLabel1;

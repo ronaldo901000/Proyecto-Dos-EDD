@@ -153,7 +153,7 @@ public class AnalizadorRendimiento {
 
                 long inicio = System.nanoTime();
 
-                sucursal.getTablaHash().buscar(p.getNombre());
+                sucursal.getTablaHash().buscar(p.getCodigoBarra());
 
                 long fin = System.nanoTime();
 

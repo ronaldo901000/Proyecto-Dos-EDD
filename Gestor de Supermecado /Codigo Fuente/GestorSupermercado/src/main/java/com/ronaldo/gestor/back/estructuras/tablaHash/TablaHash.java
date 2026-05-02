@@ -13,7 +13,7 @@ public class TablaHash {
 
     private static final double M = 0.8;
     private static final int N_PRODUCTOS = 1000;
-
+    private int totalColisiones;
     private Producto[] tabla;
     private boolean[] eliminados;
     private int cantidad;
@@ -29,6 +29,7 @@ public class TablaHash {
     /**
      *
      * @param producto
+     * @param esCSV
      * @throws ElementoExistenteException
      */
     public void insertar(Producto producto, boolean esCSV) throws ElementoExistenteException {
@@ -111,6 +112,7 @@ public class TablaHash {
         int nuevoTamaño = siguientePrimo(tabla.length * 2);
         tabla = new Producto[nuevoTamaño];
         eliminados = new boolean[nuevoTamaño];
+        totalColisiones = 0;
         cantidad = 0;
 
         for (int i = 0; i < tablaVieja.length; i++) {
@@ -167,8 +169,10 @@ public class TablaHash {
                 && !eliminados[(int) p]
                 && !tabla[(int) p].getCodigoBarra().equals(codigoBarra)) {
             i++;
+            totalColisiones++;
             p = (p + (long) i * i) % tamaño;
         }
+
         return (int) p;
     }
 
@@ -209,6 +213,51 @@ public class TablaHash {
         return d;
     }
 
+    public void generarImagen(String nombreArchivo) {
+        String rutaDot = nombreArchivo.replace(".pdf", ".dot");
+        try (PrintWriter pw = new PrintWriter(new FileWriter(rutaDot))) {
+            pw.println("digraph TablaHash {");
+            pw.println("  rankdir=TB;");
+            pw.println("  node [shape=record, fontsize=9];");
+            pw.println("  graph [label=\"Tabla Hash  |  Tamaño: " + tabla.length
+                    + "  |  Productos: " + cantidad
+                    + "  |  Factor de carga: " + String.format("%.2f", factorCarga())
+                    + "  |  Colisiones: " + totalColisiones
+                    + "\", labelloc=t, fontsize=13];");
+            for (int i = 0; i < tabla.length; i++) {
+                if (tabla[i] == null && !eliminados[i]) {
+                    continue;
+                }
+                String etiqueta;
+                if (eliminados[i]) {
+                    etiqueta = i + " | ELIMINADO";
+                } else {
+                    String nombre = tabla[i].getNombre()
+                            .replace("\"", "\\\"")
+                            .replace("<", "\\<")
+                            .replace(">", "\\>")
+                            .replace("{", "\\{")
+                            .replace("}", "\\}");
+                    etiqueta = i + " | " + tabla[i].getCodigoBarra() + " | " + nombre;
+                }
+                pw.println("  nodo" + i + " [label=\"{" + etiqueta + "}\"];");
+            }
+            pw.println("}");
+        } catch (IOException e) {
+            System.err.println("Error generando .dot: " + e.getMessage());
+            return;
+        }
+        try {
+            ProcessBuilder pb = new ProcessBuilder("dot", "-Tpdf", rutaDot, "-o", nombreArchivo);
+            pb.redirectErrorStream(true);
+            Process proceso = pb.start();
+            proceso.waitFor();
+            java.awt.Desktop.getDesktop().open(new java.io.File(nombreArchivo));
+        } catch (Exception e) {
+            System.err.println("Error ejecutando Graphviz: " + e.getMessage());
+        }
+    }
+
     public double factorCarga() {
         return (double) cantidad / tabla.length;
     }
@@ -228,6 +277,5 @@ public class TablaHash {
     public boolean isHayDuplicados() {
         return hayDuplicados;
     }
-    
-    
+
 }
