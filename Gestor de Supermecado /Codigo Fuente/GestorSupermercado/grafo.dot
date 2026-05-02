@@ -2,7 +2,6 @@ digraph Grafo {
   rankdir=LR;
   node [shape=circle, style=filled, fillcolor=lightblue];
   edge [fontsize=10];
-  "SUC-001" [label="SUC-001\nSupermercado Central"];
   "SUC-002" [label="SUC-002\nDespensa Norte"];
   "SUC-003" [label="SUC-003\nMarket Sur"];
   "SUC-004" [label="SUC-004\nExpress Oriente"];
