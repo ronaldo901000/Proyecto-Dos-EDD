@@ -87,6 +87,24 @@ public abstract class Lista {
         return actual;
     }
 
+public void eliminarPrimero() {
+        if (tamaño == 0) {
+            return;
+        }
+
+        if (tamaño == 1) {
+            this.nodoInicial = null;
+            this.nodoFinal = null;
+        } 
+        else {
+            NodoLista segundo = this.nodoInicial.getSiguienteNodo();
+            segundo.setNodoAnterior(null); 
+            this.nodoInicial = segundo; 
+        }
+
+        this.tamaño--; 
+    }
+
     public int getTamaño() {
         return tamaño;
     }

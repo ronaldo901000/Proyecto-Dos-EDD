@@ -13,6 +13,7 @@ import com.ronaldo.gestor.back.exceptions.EstructuraVaciaException;
 import com.ronaldo.gestor.back.exceptions.ListaException;
 import com.ronaldo.gestor.back.producto.Producto;
 import com.ronaldo.gestor.back.sucursal.Sucursal;
+import com.ronaldo.gestor.front.dialogs.ColasDespachoDialog;
 import com.ronaldo.gestor.front.dialogs.NuevaConexionDialog;
 import com.ronaldo.gestor.front.dialogs.NuevoProductoDialog;
 import com.ronaldo.gestor.front.frame.FrameGeneral;
@@ -965,6 +966,10 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
 
     private void btnIniciarAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarAnalisisActionPerformed
 
+        if(sucursal.getListaDesordenada().estaVacia()){
+            return;
+        }
+        
         int n = (int) spnN.getValue();
         int m = (int) spnM.getValue();
 

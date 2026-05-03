@@ -42,11 +42,11 @@ public class ProgresoPanel extends javax.swing.JPanel {
             txtDestino.setText("Destino: " + ruta.obtenerValor(ruta.getTamaño() - 1).getInfo());
             txtProducto.setText("Producto: " + producto.getNombre());
             String parametro = "Tiempo";
-            
+
             if (!esTiempo) {
                 parametro = "Costo";
             }
-            txtParametro.setText("Peso: "+parametro);
+            txtParametro.setText("Peso: " + parametro);
 
             builder.append("RUTA: \n");
             for (int i = 0; i < ruta.getTamaño(); i++) {

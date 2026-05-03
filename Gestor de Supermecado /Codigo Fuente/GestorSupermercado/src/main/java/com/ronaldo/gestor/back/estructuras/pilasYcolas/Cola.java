@@ -11,11 +11,9 @@ import com.ronaldo.gestor.back.producto.Producto;
 public class Cola {
 
     private ListaEnlazada contenido;
-    private int indiceEnCurso;
 
     public Cola() {
         contenido = new ListaEnlazada();
-        indiceEnCurso = -1;
     }
 
     public void ingresar(Producto producto) {
@@ -23,8 +21,25 @@ public class Cola {
     }
 
     public Producto sacar() throws ElementoNoEncontradoException {
-        indiceEnCurso++;
-        return contenido.obtener(indiceEnCurso);
+        if (colaVacia()) {
+            throw new ElementoNoEncontradoException("La cola esta vacia");
+        }
+
+        Producto p = contenido.obtener(0);
+        contenido.eliminarPrimero();
+        return p;
+    }
+
+    public ListaEnlazada listar() {
+        return this.contenido;
+    }
+
+    public ListaEnlazada getContenido() {
+        return contenido;
+    }
+
+    public boolean colaVacia() {
+        return this.contenido.estaVacia();
     }
 
 }
