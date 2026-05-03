@@ -16,6 +16,7 @@ import com.ronaldo.gestor.back.sucursal.Sucursal;
 import com.ronaldo.gestor.front.dialogs.ColasDespachoDialog;
 import com.ronaldo.gestor.front.dialogs.NuevaConexionDialog;
 import com.ronaldo.gestor.front.dialogs.NuevoProductoDialog;
+import com.ronaldo.gestor.front.dialogs.PilaErroneosDialog;
 import com.ronaldo.gestor.front.frame.FrameGeneral;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -94,6 +95,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         btnB = new javax.swing.JButton();
         btnBMas = new javax.swing.JButton();
         btnVerHash = new javax.swing.JButton();
+        btnPilaErroneos = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -474,6 +476,12 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         btnVerHash.setText("Ver Tabla Hash");
         btnVerHash.addActionListener(this::btnVerHashActionPerformed);
 
+        btnPilaErroneos.setBackground(new java.awt.Color(0, 204, 153));
+        btnPilaErroneos.setFont(new java.awt.Font("Liberation Sans", 1, 18)); // NOI18N
+        btnPilaErroneos.setForeground(new java.awt.Color(0, 0, 0));
+        btnPilaErroneos.setText("Ver Pila Erroneos");
+        btnPilaErroneos.addActionListener(this::btnPilaErroneosActionPerformed);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -485,7 +493,8 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                     .addComponent(btnBMas, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                     .addComponent(btnB, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                     .addComponent(btnVerAVL, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                    .addComponent(btnVerHash, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnVerHash, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPilaErroneos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -500,6 +509,8 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
                 .addComponent(btnBMas, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnVerHash, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(btnPilaErroneos, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -1007,6 +1018,11 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnVerHashActionPerformed
 
+    private void btnPilaErroneosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPilaErroneosActionPerformed
+        PilaErroneosDialog dialog = new PilaErroneosDialog(sucursal);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnPilaErroneosActionPerformed
+
     private void cargarTablaRendimiento(JTable tabla, ListaEnlazadaGenerica<ResultadoRendimiento> lista, String busqueda, JLabel label) {
 
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
@@ -1120,6 +1136,7 @@ public class PanelMenuSucursal extends javax.swing.JPanel {
     private javax.swing.JButton btnIniciarAnalisis;
     private javax.swing.JButton btnInsertar;
     private javax.swing.JButton btnListar;
+    private javax.swing.JButton btnPilaErroneos;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnVerAVL;
     private javax.swing.JButton btnVerHash;

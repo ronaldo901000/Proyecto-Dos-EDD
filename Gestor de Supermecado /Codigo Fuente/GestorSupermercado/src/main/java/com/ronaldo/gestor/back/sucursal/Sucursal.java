@@ -9,6 +9,7 @@ import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
 import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.estructuras.lista.ordenada.ListaEnlazadaOrdenada;
 import com.ronaldo.gestor.back.estructuras.pilasYcolas.Cola;
+import com.ronaldo.gestor.back.estructuras.pilasYcolas.Pila;
 import com.ronaldo.gestor.back.estructuras.tablaHash.TablaHash;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;
@@ -42,6 +43,7 @@ public class Sucursal {
     private Cola colaIngreso;
     private Cola colaTraspaso;
     private Cola colaSalida;
+    private Pila pilaErroneos;
 
     public Sucursal(String id, String nombre, String ubicacion, int tiempoIngreso, int tiempoTraspaso, int intervaloDespacho) {
         this.id = id;
@@ -60,6 +62,7 @@ public class Sucursal {
         this.colaIngreso = new Cola();
         this.colaTraspaso = new Cola();
         this.colaSalida = new Cola();
+        this.pilaErroneos = new Pila();
     }
 
     public void insertarProducto(Producto producto) throws ElementoExistenteException, ElementoNoEncontradoException {
@@ -69,9 +72,6 @@ public class Sucursal {
         //insertado en todas las estructuras
         tablaHash.insertar(producto, false);
 
-        if (tablaHash.isHayDuplicados()) {
-            return;
-        }
 
         avl.insertar(producto);
         b.insertar(producto);
@@ -272,5 +272,10 @@ public class Sucursal {
     public String getInfo() {
         return "(" + id + ")" + nombre;
     }
+
+    public Pila getPilaErroneos() {
+        return pilaErroneos;
+    }
+   
 
 }

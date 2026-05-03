@@ -15,15 +15,15 @@ import com.ronaldo.gestor.back.sucursal.Sucursal;
  * @author ronaldo
  */
 public class Transferencia extends Thread {
-
+    
     private Producto producto;
     private ListaEnlazadaGenerica<Sucursal> ruta;
     private Grafo grafo;
     private boolean esTiempo;
     private TransferenciaListener listener;
-
+    
     private static final int UN_SEGUNDO = 1000;
-
+    
     public Transferencia(Producto producto,
             ListaEnlazadaGenerica<Sucursal> ruta,
             Grafo grafo,
@@ -35,7 +35,7 @@ public class Transferencia extends Thread {
         this.esTiempo = esTiempo;
         this.listener = listener;
     }
-
+    
     @Override
     public void run() {
         try {
@@ -45,49 +45,48 @@ public class Transferencia extends Thread {
                 listener.sucursalEntrada(producto, actual);
                 Thread.sleep(actual.getTiempoIngreso() * UN_SEGUNDO);
                 actual.getColaIngreso().sacar();
-
+                
                 if (!esDestino(i)) {
                     actual.getColaTraspaso().ingresar(producto);
                     listener.preparando(producto, actual);
                     Thread.sleep(actual.getTiempoTraspaso() * UN_SEGUNDO);
                     actual.getColaTraspaso().sacar();
-
+                    
                     actual.getColaSalida().ingresar(producto);
                     listener.despachando(producto, actual);
                     Thread.sleep(actual.getIntervaloDespacho() * UN_SEGUNDO);
                     actual.getColaSalida().sacar();
-
+                    
                     Sucursal siguiente = ruta.obtenerValor(i + 1);
                     int pesoArista = obtenerPesoArista(actual, siguiente);
                     listener.viajando(producto, actual, siguiente, pesoArista);
                     Thread.sleep(pesoArista * UN_SEGUNDO);
                 }
             }
-
+            
             Sucursal origen = ruta.obtenerValor(0);
             Sucursal destino = ruta.obtenerValor(ruta.getTamaño() - 1);
-
+            
             Producto p = destino.getTablaHash().buscar(producto.getCodigoBarra());
             producto.setDisponible(true);
             
             if (p != null) {
-                
+                destino.getPilaErroneos().apilar(producto);
                 listener.error(producto, "El producto ya existe en " + destino.getNombre());
                 return;
             }
-
             
             destino.insertarProducto(producto);
             origen.eliminar(producto.getCodigoBarra());
             listener.exito(producto, destino);
-
+            
         } catch (InterruptedException | ListaException | ElementoNoEncontradoException
                 | ElementoExistenteException | EstructuraVaciaException e) {
-
+            
             listener.error(producto, e.getMessage());
         }
     }
-
+    
     private int obtenerPesoArista(Sucursal origen, Sucursal destino) {
         Arista arista = origen.getCabezaLista();
         while (arista != null) {
@@ -102,7 +101,7 @@ public class Transferencia extends Thread {
         }
         return 0;
     }
-
+    
     private boolean esDestino(int i) {
         return i == this.ruta.getTamaño() - 1;
     }

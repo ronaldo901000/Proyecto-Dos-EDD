@@ -34,7 +34,20 @@ public class Pila {
         return p;
     }
 
-    private boolean pilaVacia() {
+    public boolean pilaVacia() {
         return this.apuntador == -1;
     }
+
+    public int getApuntador() {
+        return apuntador;
+    }
+
+    public ListaEnlazada getContenedor() {
+        return contenedor;
+    }
+    
+    
+    
+    
+    
 }

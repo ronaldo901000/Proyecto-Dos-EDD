@@ -16,13 +16,13 @@ public class VerificadorDeProductos {
         //verificar que el codigo de barras no sea duplicado
         Producto p = sucursal.getTablaHash().buscar(producto.getCodigoBarra());
         if(p !=null){
+            sucursal.getPilaErroneos().apilar(producto);
             throw new ElementoExistenteException(
                     "El codigo de barras "+ 
                             producto.getCodigoBarra()+
                             " ya ha sido registrado antes, elige otro. "
             );
         }
-        
         
     }
 }
