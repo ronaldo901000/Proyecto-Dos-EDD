@@ -211,7 +211,8 @@ public class CargaCSVDialog extends javax.swing.JDialog {
 
     private void btnCargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarActionPerformed
 
-        JFileChooser chooser = new JFileChooser("/home/ronaldo/Documentos/2026/Cursos/2. Estructura de Datos/Proyectos y Enunciados/Proyectos/3. Proyecto Dos/Gestor de Supermecado /CSV");
+        //JFileChooser chooser = new JFileChooser("/home/ronaldo/Documentos/2026/Cursos/2. Estructura de Datos/Proyectos y Enunciados/Proyectos/3. Proyecto Dos/Gestor de Supermecado /CSV");
+        JFileChooser chooser = new JFileChooser();
 
         chooser.setDialogTitle("Carga de CSV");
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivo CSV", "csv");

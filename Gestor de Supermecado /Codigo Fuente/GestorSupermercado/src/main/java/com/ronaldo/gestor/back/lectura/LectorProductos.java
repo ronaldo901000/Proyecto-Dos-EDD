@@ -3,7 +3,6 @@ package com.ronaldo.gestor.back.lectura;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.ronaldo.gestor.back.estructuras.lista.generica.ListaEnlazadaGenerica;
-import com.ronaldo.gestor.back.estructuras.lista.normal.ListaEnlazada;
 import com.ronaldo.gestor.back.exceptions.DatoInvalidoException;
 import com.ronaldo.gestor.back.exceptions.ElementoExistenteException;
 import com.ronaldo.gestor.back.exceptions.ElementoNoEncontradoException;

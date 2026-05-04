@@ -111,7 +111,7 @@ public class ArbolB {
             resultado = insertarRecursivo(hijo, clave);
 
             if (resultado.isSeDividio()) {
-                // Encontrar posición correcta para la clave mediana
+                
                 int pos = 0;
                 while (pos < nodo.getContador()
                         && resultado.getClaveMediana().getFecha()
@@ -129,7 +129,7 @@ public class ArbolB {
                     nodo.setHijoPorIndice(i, nodo.getHijoPorIndice(i - 1));
                 }
 
-                // Insertar clave y hermano derecho en posición correcta
+                // Insertar clave y hermano derecho en posicion correcta
                 nodo.setClavePorIndice(pos, resultado.getClaveMediana());
                 nodo.setHijoPorIndice(pos + 1, resultado.getHermanoDerecho());
                 nodo.setContador(nodo.getContador() + 1);
