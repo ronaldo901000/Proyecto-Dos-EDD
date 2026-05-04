@@ -46,6 +46,7 @@ public class Producto {
         }
 
         if (codigoBarra.length() != CARACTERES_CODIGO_BARRA) {
+            datoInvalido = true;
             throw new DatoInvalidoException("El codigo de barras debe tener EXACTAMENTE 10 caracteres");
         }
 
